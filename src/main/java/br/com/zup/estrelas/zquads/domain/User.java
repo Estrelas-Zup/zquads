@@ -62,8 +62,9 @@ public class User {
     private Role role;
 
     @JsonManagedReference
-    @OneToMany
-    @JoinColumn(name = "id_user")
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_squad"))
     private List<Squad> squads;
 
     @JsonManagedReference
