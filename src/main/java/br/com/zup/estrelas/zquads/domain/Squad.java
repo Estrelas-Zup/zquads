@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -43,12 +44,12 @@ public class Squad {
     private String repository;
 
     @JsonBackReference
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SQUAD_USER_ADMIN"))
     private List<User> admins;
 
     @JsonBackReference
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SQUAD_USER_MEMBER"))
     private List<User> members;
 
