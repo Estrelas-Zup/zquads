@@ -6,11 +6,12 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -71,22 +72,23 @@ public class User {
     private List<Skill> skills;
 
     @JsonManagedReference
-    @OneToMany
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_USER_FRIEND"))
+    @ManyToMany
+    @JoinTable(name = "friends", joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_friend"))
     private List<User> friends;
 
     @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "id_user")
     private List<Task> tasks;
-    
+
     @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "id_user")
     private List<FeedElement> feedElements;
 
     // Getters and Setters
-    
+
     public Long getIdUser() {
         return idUser;
     }
@@ -214,5 +216,5 @@ public class User {
     public void setFeedElements(List<FeedElement> feedElements) {
         this.feedElements = feedElements;
     }
-    
+
 }
