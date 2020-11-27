@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.estrelas.zquads.domain.User;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
+import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
 import br.com.zup.estrelas.zquads.service.UserService;
 
@@ -22,6 +23,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    // User
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO createSecretariat(@RequestBody UserDTO user) {
@@ -46,6 +49,13 @@ public class UserController {
     @DeleteMapping(path = "/{email}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO deleteUser(@PathVariable String email) {
         return userService.deleteUser(email);
+    }
+
+    // Skill
+
+    @PutMapping(path = "/addSkill/{email}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDTO addSkill(@PathVariable String email, @RequestBody SkillDTO skill) {
+        return userService.addSkill(email, skill);
     }
 
 }
