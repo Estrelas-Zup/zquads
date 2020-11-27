@@ -1,5 +1,7 @@
 package br.com.zup.estrelas.zquads.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 // import java.util.List;
 import br.com.zup.estrelas.zquads.domain.Address;
 // import br.com.zup.estrelas.zquads.domain.Skill;
@@ -10,10 +12,14 @@ import br.com.zup.estrelas.zquads.domain.Address;
 
 public class UserDTO {
 
+    @NotBlank(message =  "NAME IS MANDATORY")
     private String name;
 
+    @NotBlank(message =  "E-MAIL IS MANDATORY")
+    @Email(message = "ENTER A VALID E-MAIL")
     private String email;
 
+    @NotBlank(message =  "NICKNAME IS MANDATORY")
     private String nickname;
 
     private Address address;

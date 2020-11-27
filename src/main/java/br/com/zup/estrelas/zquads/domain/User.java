@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import br.com.zup.estrelas.zquads.enums.Gender;
 import br.com.zup.estrelas.zquads.enums.Race;
@@ -34,7 +33,6 @@ public class User {
     private String name;
 
     @Column(unique = true, nullable = false)
-    @Email(message = "ENTER A VALID E-MAIL")
     private String email;
 
     @Column(unique = true, nullable = false)
