@@ -33,13 +33,13 @@ public class Squad {
     private String bio;
 
     @Column(name = "starting_date", nullable = false)
-    private LocalDate startingDate;
+    private LocalDate startingDate = LocalDate.now();
 
     @Column(name = "finishing_date")
     private LocalDate finishingDate;
 
     @Column(name = "is_finished")
-    private boolean isFinished;
+    private boolean isFinished = false;
 
     private String repository;
 

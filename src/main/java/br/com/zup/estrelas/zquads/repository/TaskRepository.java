@@ -6,5 +6,7 @@ import br.com.zup.estrelas.zquads.domain.Task;
 
 @Repository
 public interface TaskRepository extends CrudRepository<Task, Long> {
+    
+    boolean existsByName(String name);
 
 }

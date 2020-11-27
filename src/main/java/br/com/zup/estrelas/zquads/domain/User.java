@@ -35,7 +35,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     @Embedded
     private Address address;
 
@@ -78,9 +78,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "id_friend"))
     private List<User> friends;
 
-    @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "id_user")
+    @JsonManagedReference
     private List<Task> tasks;
 
     @JsonManagedReference
