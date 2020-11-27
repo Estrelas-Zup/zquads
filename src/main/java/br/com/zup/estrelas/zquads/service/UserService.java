@@ -8,13 +8,13 @@ import br.com.zup.estrelas.zquads.dto.UserDTO;
 public interface UserService {
 
     public ResponseDTO createUser(UserDTO userDTO);
-    
-    public User readUser(Long idUser);
-    
+
+    public User readUser(String email);
+
     public List<User> listUsers();
-    
-    public ResponseDTO updateUser(Long idUser, UserDTO userDTO);
-    
-    public ResponseDTO deleteUser(Long idUser);
-    
+
+    public ResponseDTO updateUser(String email, UserDTO userDTO);
+
+    public ResponseDTO deleteUser(String email);
+
 }
