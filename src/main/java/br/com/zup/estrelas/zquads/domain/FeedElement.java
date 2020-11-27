@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,15 +35,15 @@ public class FeedElement implements Serializable{
     private User author;
 
     @Column(name="id_user", insertable=false, updatable=false)
-    @NotNull(message="idUser is mandatory")
+    @NotNull(message="Id user is mandatory")
     private Long idUser;
     
     @Column(nullable = false)
     @NotBlank(message="Content is mandatory")
-    @NotEmpty(message="Content is mandatory")
     private String content;
 
     @Column(nullable = false) 
+    @NotNull(message="Date is mandatory")
     private LocalDateTime date;
 
     @JsonBackReference
@@ -54,33 +53,13 @@ public class FeedElement implements Serializable{
     private Squad squad;
 
     @Column(name="id_squad", insertable=false, updatable=false)
-    @NotNull(message="IdSquad is mandatory")
+    @NotNull(message="Id Squad is mandatory")
     private Long idSquad;
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FeedElementType type;
-
-    public FeedElement() {
-        
-    }
-    
-    public FeedElement(Long idFeedElement, User author,
-             Long idUser,
-             String content,
-            LocalDateTime date, Squad squad,
-            Long idSquad, FeedElementType type) {
-        super();
-        this.idFeedElement = idFeedElement;
-        this.author = author;
-        this.idUser = idUser;
-        this.content = content;
-        this.date = date;
-        this.squad = squad;
-        this.idSquad = idSquad;
-        this.type = type;
-    }
-    
+ 
     // Getters and Setters
 
     public Long getIdFeedElement() {
@@ -145,13 +124,6 @@ public class FeedElement implements Serializable{
 
     public void setType(FeedElementType type) {
         this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "FeedElement [idFeedElement=" + idFeedElement + ", author=" + author + ", idUser="
-                + idUser + ", content=" + content + ", date=" + date + ", squad=" + squad
-                + ", idSquad=" + idSquad + ", type=" + type + "]";
     }
 
 }

@@ -1,18 +1,22 @@
 package br.com.zup.estrelas.zquads.dto;
 
 import java.time.LocalDateTime;
-import br.com.zup.estrelas.zquads.domain.Squad;
-import br.com.zup.estrelas.zquads.domain.User;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import br.com.zup.estrelas.zquads.enums.FeedElementType;
 
 public class FeedElementDTO {
 
+    @NotNull(message="Id user is mandatory")
     private Long idUser;
 
+    @NotBlank(message="Content is mandatory")
     private String content;
 
+    @NotNull(message="Date is mandatory")
     private LocalDateTime date = LocalDateTime.now();
 
+    @NotNull(message="Id Squad is mandatory")
     private Long idSquad;
 
     private FeedElementType type;

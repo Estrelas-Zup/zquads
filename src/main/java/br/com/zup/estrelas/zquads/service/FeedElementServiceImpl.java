@@ -1,5 +1,8 @@
 package br.com.zup.estrelas.zquads.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import br.com.zup.estrelas.zquads.domain.Squad;
 import br.com.zup.estrelas.zquads.domain.User;
 import br.com.zup.estrelas.zquads.dto.FeedElementDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
+import br.com.zup.estrelas.zquads.enums.FeedElementType;
 import br.com.zup.estrelas.zquads.repository.FeedElementRepository;
 import br.com.zup.estrelas.zquads.repository.SquadRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
@@ -18,9 +22,10 @@ public class FeedElementServiceImpl implements FeedElementService {
 
     private static final String FEED_ELEMENT_CREATED_SUCESSFULLY = "The feed element has been created sucessfully.";
     private static final String FEED_ELEMENT_DELETE_SUCESSFULLY = "The feed element has been deleted sucessfully.";
-    private static final String FEED_ELEMENT_NOT_EXISTS = "This feed element not exists.";
+    private static final String FEED_ELEMENT_NOT_FOUND = "This feed element not found.";
     private static final String SQUAD_NOT_FOUND = "This squad not found.";
     private static final String USER_NOT_FOUND = "This user not found.";
+    private static final String TYPE_NOT_FOUND = "This feed element type not found.";
     
     
     @Autowired
@@ -46,7 +51,8 @@ public class FeedElementServiceImpl implements FeedElementService {
         if(user.isEmpty()) {
             return new ResponseDTO(USER_NOT_FOUND);
         }
-        
+
+
         FeedElement feedElementDB = new FeedElement();
         BeanUtils.copyProperties (feedElementDTO, feedElementDB);
         feedElementDB.setAuthor(user.get());
@@ -59,7 +65,7 @@ public class FeedElementServiceImpl implements FeedElementService {
     public ResponseDTO deleteFeedElement(Long idFeedElement) {
         
         if(!feedElementRepository.existsById(idFeedElement)) {
-            return new ResponseDTO(FEED_ELEMENT_NOT_EXISTS);
+            return new ResponseDTO(FEED_ELEMENT_NOT_FOUND);
         }
         
         feedElementRepository.deleteById(idFeedElement);
