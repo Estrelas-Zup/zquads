@@ -7,4 +7,5 @@ import br.com.zup.estrelas.zquads.domain.User;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     
+    public boolean existsByEmail(String email);
 }

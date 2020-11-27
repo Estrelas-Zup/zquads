@@ -7,24 +7,24 @@ import br.com.zup.estrelas.zquads.enums.FeedElementType;
 
 public class FeedElementDTO {
 
-    private User author;
+    private Long idUser;
 
     private String content;
 
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
-    private Squad squad;
+    private Long idSquad;
 
     private FeedElementType type;
 
     // Getters and Setters
     
-    public User getAuthor() {
-        return author;
+    public Long getIdUser() {
+        return idUser;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 
     public String getContent() {
@@ -43,12 +43,12 @@ public class FeedElementDTO {
         this.date = date;
     }
 
-    public Squad getSquad() {
-        return squad;
+    public Long getIdSquad() {
+        return idSquad;
     }
 
-    public void setSquad(Squad squad) {
-        this.squad = squad;
+    public void setIdSquad(Long idSquad) {
+        this.idSquad = idSquad;
     }
 
     public FeedElementType getType() {

@@ -7,4 +7,5 @@ import br.com.zup.estrelas.zquads.domain.Squad;
 @Repository
 public interface SquadRepository extends CrudRepository<Squad, Long> {
 
+    public boolean existsByName(String name);
 }
