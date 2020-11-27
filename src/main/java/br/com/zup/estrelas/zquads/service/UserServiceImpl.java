@@ -99,7 +99,6 @@ public class UserServiceImpl implements UserService {
         }
 
         User updatedUser = user.get();
-        List<Skill> skillList = new ArrayList<Skill>();
 
         Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
 
@@ -109,18 +108,17 @@ public class UserServiceImpl implements UserService {
 
         Skill searchedSkill = skill.get();
         List<Skill> updatedUserSkills = updatedUser.getSkills();
-        
+
         for (Skill updatedUserSkill : updatedUserSkills) {
-            
+
             if (updatedUserSkill.equals(searchedSkill)) {
                 return new ResponseDTO(SKILL_DOES_EXIST);
             }
-            
+
         }
-        
-        skillList.add(skill.get());
-        updatedUser.setSkills(skillList);
-        
+
+        updatedUserSkills.add(skill.get());
+
         userRepository.save(updatedUser);
 
         return new ResponseDTO(SKILL_SUCCESSFULLY_ADDED);
