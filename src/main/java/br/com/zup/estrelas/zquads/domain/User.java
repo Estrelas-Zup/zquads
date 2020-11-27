@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import br.com.zup.estrelas.zquads.enums.Gender;
 import br.com.zup.estrelas.zquads.enums.Race;
@@ -32,15 +33,17 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
+    @Email(message = "ENTER A VALID E-MAIL")
     private String email;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
+    private String nickname;
+
+    // @Column(nullable = false)
     @Embedded
     private Address address;
 
-    @Column(nullable = false)
-    private String nickname;
 
     @Column(name = "git_hub")
     private String gitHub;
@@ -57,7 +60,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SexualOrientation sexualOrientation;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
