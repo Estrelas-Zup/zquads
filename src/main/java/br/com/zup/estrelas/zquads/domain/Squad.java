@@ -53,7 +53,6 @@ public class Squad {
     @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SQUAD_USER_MEMBER"))
     private List<User> members;
 
-    @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "id_squad", foreignKey=@ForeignKey(name="FK_ID_SQUAD_TASK"))
     private List<Task> tasks;

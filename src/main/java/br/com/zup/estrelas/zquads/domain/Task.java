@@ -1,36 +1,24 @@
 package br.com.zup.estrelas.zquads.domain;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "task")
-public class Task implements Serializable{
+public class Task {
 
-    private static final long serialVersionUID = -6533086328480540626L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_task")
     private Long idTask;
     
-    @ManyToOne
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_TASK_USER"), referencedColumnName = "id_user")
-    @JsonBackReference
-    private User author;
-    
-    @Column(name = "id_user", insertable = false, updatable = false)
+    @Column(name = "id_user")
     private Long idUser;
     
     @Column(nullable = false, unique = true)
@@ -39,13 +27,7 @@ public class Task implements Serializable{
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "id_squad", foreignKey=@ForeignKey(name="FK_ID_TASK_SQUAD"), referencedColumnName = "id_squad")
-    @JsonBackReference
-    @JsonIgnore
-    private Squad squad;
-    
-    @Column(name = "id_squad", insertable = false, updatable = false)
+    @Column(name = "id_squad")
     private Long idSquad;
 
     @Column(name = "starting_date", nullable = false)
@@ -66,15 +48,7 @@ public class Task implements Serializable{
     public void setIdTask(Long idTask) {
         this.idTask = idTask;
     }
-    
-    public User getAuthor() {
-        return author;
-    }
-    
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-    
+        
     public Long getIdUser() {
         return idUser;
     }
@@ -97,14 +71,6 @@ public class Task implements Serializable{
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Squad getSquad() {
-        return squad;
-    }
-
-    public void setSquad(Squad squad) {
-        this.squad = squad;
     }
     
     public Long getIdSquad() {

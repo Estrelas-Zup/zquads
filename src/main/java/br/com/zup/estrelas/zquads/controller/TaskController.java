@@ -48,5 +48,10 @@ public class TaskController {
     public ResponseDTO deleteTask(@PathVariable Long idTask) {
         return this.taskService.deleteTask(idTask);
     }
+    
+    @PutMapping(path = "/finish/{idTask}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDTO finishTask(@PathVariable Long idTask) {
+        return this.taskService.finishTask(idTask);
+    }
 
 }

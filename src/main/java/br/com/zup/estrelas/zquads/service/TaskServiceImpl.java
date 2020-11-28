@@ -53,8 +53,6 @@ public class TaskServiceImpl implements TaskService {
         
         Task taskDB = new Task();
         BeanUtils.copyProperties(taskDTO, taskDB);
-        taskDB.setSquad(squad.get());
-        taskDB.setAuthor(user.get());
         this.taskRepository.save(taskDB);
         return new ResponseDTO(TASK_SUCCESSFULLY_CREATED);
     }
@@ -104,6 +102,7 @@ public class TaskServiceImpl implements TaskService {
         
         task.get().setFinishingDate(LocalDateTime.now());
         task.get().setFinished(true);
+        taskRepository.save(task.get());
         
         return new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
     }
