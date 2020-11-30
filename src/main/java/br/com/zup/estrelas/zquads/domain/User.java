@@ -32,15 +32,18 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    @Embedded
-    private Address address;
+    @Column(unique = true, nullable = false)
+    private String nickname;
 
     @Column(nullable = false)
-    private String nickname;
+    private String password;
+
+    // @Column(nullable = false)
+    @Embedded
+    private Address address;
 
     @Column(name = "git_hub")
     private String gitHub;
@@ -57,7 +60,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SexualOrientation sexualOrientation;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -114,13 +117,6 @@ public class User {
         this.email = email;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
     public String getNickname() {
         return nickname;
@@ -128,6 +124,22 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getGitHub() {
