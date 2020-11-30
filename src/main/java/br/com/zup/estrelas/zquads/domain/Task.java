@@ -21,7 +21,7 @@ public class Task {
     @Column(name = "id_user")
     private Long idUser;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)

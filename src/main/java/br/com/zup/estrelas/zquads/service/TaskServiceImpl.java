@@ -19,7 +19,6 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    private static final String EXISTING_TASK = "existing task, choose a distinct name";
     private static final String TASK_SUCCESSFULLY_CREATED = "task successfully created";
     private static final String TASK_SUCCESSFULLY_UPDATED = "task successfully updated";
     private static final String TASK_SUCCESSFULLY_DELETED = "task successfully deleted";
@@ -36,10 +35,6 @@ public class TaskServiceImpl implements TaskService {
     UserRepository userRepository;
     
     public ResponseDTO createTask(TaskDTO taskDTO) {
-        
-        if (this.taskRepository.existsByName(taskDTO.getName())) {
-            return new ResponseDTO(EXISTING_TASK);
-        }
         
         Optional<Squad> squad = this.squadRepository.findById(taskDTO.getIdSquad());
         if (squad.isEmpty()) {
