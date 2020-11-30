@@ -18,6 +18,7 @@ public class UserDTO {
     @NotBlank(message = "NICKNAME IS MANDATORY")
     private String nickname;
 
+    @NotBlank(message = "PASSWORD IS MANDATORY")
     private String password;
 
     private Address address;
