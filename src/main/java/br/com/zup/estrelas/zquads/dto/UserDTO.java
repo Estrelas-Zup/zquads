@@ -1,26 +1,24 @@
 package br.com.zup.estrelas.zquads.dto;
 
+import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-// import java.util.List;
 import br.com.zup.estrelas.zquads.domain.Address;
-// import br.com.zup.estrelas.zquads.domain.Skill;
-// import br.com.zup.estrelas.zquads.domain.Squad;
-// import br.com.zup.estrelas.zquads.domain.Task;
-// import br.com.zup.estrelas.zquads.domain.User;
-// import br.com.zup.estrelas.zquads.enums.Role;
+import br.com.zup.estrelas.zquads.enums.Role;
 
 public class UserDTO {
 
-    @NotBlank(message =  "NAME IS MANDATORY")
+    @NotBlank(message = "NAME IS MANDATORY")
     private String name;
 
-    @NotBlank(message =  "E-MAIL IS MANDATORY")
+    @NotBlank(message = "E-MAIL IS MANDATORY")
     @Email(message = "ENTER A VALID E-MAIL")
     private String email;
 
-    @NotBlank(message =  "NICKNAME IS MANDATORY")
+    @NotBlank(message = "NICKNAME IS MANDATORY")
     private String nickname;
+
+    private String password;
 
     private Address address;
 
@@ -34,15 +32,7 @@ public class UserDTO {
 
     private String sexualOrientation;
 
-    // private List<Role> role;
-    //
-    // private List<Squad> squads;
-    //
-    // private List<Skill> skills;
-    //
-    // private List<User> friends;
-    //
-    // private List<Task> tasks;
+    private List<Role> role;
 
     // Getters and Setters
 
@@ -70,6 +60,14 @@ public class UserDTO {
         this.nickname = nickname;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -77,7 +75,6 @@ public class UserDTO {
     public void setAddress(Address address) {
         this.address = address;
     }
-
 
     public String getGitHub() {
         return gitHub;
@@ -119,44 +116,12 @@ public class UserDTO {
         this.sexualOrientation = sexualOrientation;
     }
 
-    // public List<Role> getRole() {
-    // return role;
-    // }
-    //
-    // public void setRole(List<Role> role) {
-    // this.role = role;
-    // }
-    //
-    // public List<Squad> getSquads() {
-    // return squads;
-    // }
-    //
-    // public void setSquads(List<Squad> squads) {
-    // this.squads = squads;
-    // }
-    //
-    // public List<Skill> getSkills() {
-    // return skills;
-    // }
-    //
-    // public void setSkills(List<Skill> skills) {
-    // this.skills = skills;
-    // }
-    //
-    // public List<User> getFriends() {
-    // return friends;
-    // }
-    //
-    // public void setFriends(List<User> friends) {
-    // this.friends = friends;
-    // }
-    //
-    // public List<Task> getTasks() {
-    // return tasks;
-    // }
-    //
-    // public void setTasks(List<Task> tasks) {
-    // this.tasks = tasks;
-    // }
+    public List<Role> getRole() {
+        return role;
+    }
+
+    public void setRole(List<Role> role) {
+        this.role = role;
+    }
 
 }
