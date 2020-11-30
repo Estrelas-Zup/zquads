@@ -1,6 +1,5 @@
 package br.com.zup.estrelas.zquads.dto;
 
-import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import br.com.zup.estrelas.zquads.domain.Address;
@@ -33,7 +32,7 @@ public class UserDTO {
 
     private String sexualOrientation;
 
-    private List<Role> role;
+    private Role role;
 
     // Getters and Setters
 
@@ -117,11 +116,11 @@ public class UserDTO {
         this.sexualOrientation = sexualOrientation;
     }
 
-    public List<Role> getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(List<Role> role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

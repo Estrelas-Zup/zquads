@@ -84,7 +84,7 @@ public class SquadServiceImpl implements SquadService {
         return new ResponseDTO(SQUAD_NOT_EXIST);
     }
     
-    public ResponseDTO finishedSquad(Long idSquad) {
+    public ResponseDTO finishProject(Long idSquad) {
         Optional<Squad> squad = squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
             return new ResponseDTO(SQUAD_NOT_EXIST);
@@ -96,6 +96,7 @@ public class SquadServiceImpl implements SquadService {
     }
 
     public ResponseDTO addMember(User user, Long idSquad) {
+        
         Optional<Squad> squad = squadRepository.findById(idSquad);
         List<User> members = squad.get().getMembers();
         members.add(user);

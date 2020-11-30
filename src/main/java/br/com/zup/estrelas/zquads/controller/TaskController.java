@@ -15,40 +15,49 @@ import br.com.zup.estrelas.zquads.domain.Task;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.TaskDTO;
 import br.com.zup.estrelas.zquads.dto.UpdateTaskDTO;
-import br.com.zup.estrelas.zquads.service.TaskServiceImpl;
+import br.com.zup.estrelas.zquads.service.TaskService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tasks")
+@Api(value = "Task")
 public class TaskController {
     
     @Autowired
-    TaskServiceImpl taskService;
+    TaskService taskService;
     
+    @ApiOperation(value = "Create a task")
     @PostMapping (produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO createTask(@RequestBody TaskDTO taskDto) {
         return this.taskService.createTask(taskDto);
     }
     
+    @ApiOperation(value = "List a task by your ID")
     @GetMapping(path = "/{idTask}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Task readTask(@PathVariable Long idTask) {
         return this.taskService.readTask(idTask);
     }
     
+    @ApiOperation(value = "List all tasks")
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Task> listTask() {
         return this.taskService.listTasks();
     }
     
+    @ApiOperation(value = "Change attributes of a task")
     @PutMapping(path = "/{idTask}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO updateTask(@PathVariable Long idTask, @RequestBody UpdateTaskDTO taskDTO) {
         return this.taskService.updateTask(idTask, taskDTO);
     }
     
+    @ApiOperation(value = "delete a task")
     @DeleteMapping(path = "/{idTask}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO deleteTask(@PathVariable Long idTask) {
         return this.taskService.deleteTask(idTask);
     }
     
+    @ApiOperation(value = "finish a task")
     @PutMapping(path = "/finish/{idTask}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO finishTask(@PathVariable Long idTask) {
         return this.taskService.finishTask(idTask);
