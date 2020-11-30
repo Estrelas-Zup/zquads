@@ -3,45 +3,41 @@ package br.com.zup.estrelas.zquads.domain;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "task")
 public class Task {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_task")
     private Long idTask;
-
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_TASK_USER"))
-    private User author;
-
+    
+    @Column(name = "id_user")
+    private Long idUser;
+    
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private String content;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "id_squad", foreignKey=@ForeignKey(name="FK_ID_TASK_SQUAD"))
-    private Squad squad;
+    @Column(name = "id_squad")
+    private Long idSquad;
 
     @Column(name = "starting_date", nullable = false)
-    private LocalDateTime startingDate;
+    private LocalDateTime startingDate = LocalDateTime.now();
 
     @Column(name = "finishing_date")
-    private LocalDateTime finishingDate;
+    private LocalDateTime finishingDate = null;
+    
+    @Column(name = "is_finished")
+    private boolean isFinished = false;
 
     // Getters and Setters
 
@@ -52,13 +48,13 @@ public class Task {
     public void setIdTask(Long idTask) {
         this.idTask = idTask;
     }
-
-    public User getAuthor() {
-        return author;
+        
+    public Long getIdUser() {
+        return idUser;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 
     public String getName() {
@@ -76,13 +72,13 @@ public class Task {
     public void setContent(String content) {
         this.content = content;
     }
-
-    public Squad getSquad() {
-        return squad;
+    
+    public Long getIdSquad() {
+        return idSquad;
     }
 
-    public void setSquad(Squad squad) {
-        this.squad = squad;
+    public void setIdSquad(Long idSquad) {
+        this.idSquad = idSquad;
     }
 
     public LocalDateTime getStartingDate() {
@@ -99,6 +95,14 @@ public class Task {
 
     public void setFinishingDate(LocalDateTime finishingDate) {
         this.finishingDate = finishingDate;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean isFinished) {
+        this.isFinished = isFinished;
     }
 
 }

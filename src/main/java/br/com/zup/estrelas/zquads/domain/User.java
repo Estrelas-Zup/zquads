@@ -6,6 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -81,9 +82,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "id_friend"))
     private List<User> friends;
 
-    @JsonManagedReference
     @OneToMany
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_TASK_USER"))
     private List<Task> tasks;
 
     @JsonManagedReference

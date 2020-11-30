@@ -1,16 +1,14 @@
 package br.com.zup.estrelas.zquads.dto;
 
-
-public class TaskDTO {
+public class UpdateTaskDTO {
 
     private Long idUser;
-
+    
     private String name;
 
     private String content;
 
-    private Long idSquad;
-
+    
     // Getters and Setters
     
     public Long getIdUser() {
@@ -21,6 +19,7 @@ public class TaskDTO {
         this.idUser = idUser;
     }
 
+    
     public String getName() {
         return name;
     }
@@ -35,14 +34,6 @@ public class TaskDTO {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Long getIdSquad() {
-        return idSquad;
-    }
-
-    public void setIdSquad(Long idSquad) {
-        this.idSquad = idSquad;
-    }
+        }
     
 }

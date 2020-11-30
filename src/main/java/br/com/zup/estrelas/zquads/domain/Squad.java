@@ -33,7 +33,7 @@ public class Squad {
 
     private String bio;
 
-    @Column(name = "starting_date")
+    @Column(name = "starting_date", nullable = false)
     private LocalDate startingDate = LocalDate.now();
 
     @Column(name = "finishing_date")
@@ -63,7 +63,6 @@ public class Squad {
     @JsonIgnore
     private List<User> members;
 
-    @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "id_squad", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_TASK"))
     private List<Task> tasks;
