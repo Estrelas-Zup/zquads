@@ -1,5 +1,6 @@
 package br.com.zup.estrelas.zquads.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,12 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.zup.estrelas.zquads.enums.FeedElementType;
 
 @Entity
 @Table(name = "feed_element")
-public class FeedElement {
+public class FeedElement implements Serializable{
+
+    private static final long serialVersionUID = -364272089595690154L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,24 +32,36 @@ public class FeedElement {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_FEED_ELEMENT_USER"))
+    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_FEED_ELEMENT_USER"), referencedColumnName="id_user")
+    @JsonIgnore
     private User author;
 
+    @Column(name="id_user", insertable=false, updatable=false)
+    @NotNull(message="Id user is mandatory")
+    private Long idUser;
+    
     @Column(nullable = false)
+    @NotBlank(message="Content is mandatory")
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false) 
+    @NotNull(message="Date is mandatory")
     private LocalDateTime date;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "id_squad", foreignKey=@ForeignKey(name="FK_ID_FEED_ELEMENT_SQUAD"))
+    @JoinColumn(name = "id_squad", foreignKey=@ForeignKey(name="FK_ID_FEED_ELEMENT_SQUAD"), referencedColumnName="id_squad")
+    @JsonIgnore
     private Squad squad;
 
+    @Column(name="id_squad", insertable=false, updatable=false)
+    @NotNull(message="Id Squad is mandatory")
+    private Long idSquad;
+    
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FeedElementType type;
-
+ 
     // Getters and Setters
 
     public Long getIdFeedElement() {
@@ -62,6 +80,14 @@ public class FeedElement {
         this.author = author;
     }
 
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
+    }
+    
     public LocalDateTime getDate() {
         return date;
     }
@@ -70,6 +96,14 @@ public class FeedElement {
         this.date = date;
     }
 
+    public Long getIdSquad() {
+        return idSquad;
+    }
+
+    public void setIdSquad(Long idSquad) {
+        this.idSquad = idSquad;
+    }
+    
     public String getContent() {
         return content;
     }

@@ -1,30 +1,34 @@
 package br.com.zup.estrelas.zquads.dto;
 
 import java.time.LocalDateTime;
-import br.com.zup.estrelas.zquads.domain.Squad;
-import br.com.zup.estrelas.zquads.domain.User;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import br.com.zup.estrelas.zquads.enums.FeedElementType;
 
 public class FeedElementDTO {
 
-    private User author;
+    @NotNull(message="Id user is mandatory")
+    private Long idUser;
 
+    @NotBlank(message="Content is mandatory")
     private String content;
 
-    private LocalDateTime date;
+    @NotNull(message="Date is mandatory")
+    private LocalDateTime date = LocalDateTime.now();
 
-    private Squad squad;
+    @NotNull(message="Id Squad is mandatory")
+    private Long idSquad;
 
     private FeedElementType type;
 
     // Getters and Setters
     
-    public User getAuthor() {
-        return author;
+    public Long getIdUser() {
+        return idUser;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 
     public String getContent() {
@@ -43,12 +47,12 @@ public class FeedElementDTO {
         this.date = date;
     }
 
-    public Squad getSquad() {
-        return squad;
+    public Long getIdSquad() {
+        return idSquad;
     }
 
-    public void setSquad(Squad squad) {
-        this.squad = squad;
+    public void setIdSquad(Long idSquad) {
+        this.idSquad = idSquad;
     }
 
     public FeedElementType getType() {
