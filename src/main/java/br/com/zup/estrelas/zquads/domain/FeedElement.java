@@ -23,9 +23,6 @@ import br.com.zup.estrelas.zquads.enums.FeedElementType;
 @Table(name = "feed_element")
 public class FeedElement implements Serializable{
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -364272089595690154L;
 
     @Id

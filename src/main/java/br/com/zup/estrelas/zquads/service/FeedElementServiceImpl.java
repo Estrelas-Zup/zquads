@@ -1,8 +1,5 @@
 package br.com.zup.estrelas.zquads.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import br.com.zup.estrelas.zquads.domain.Squad;
 import br.com.zup.estrelas.zquads.domain.User;
 import br.com.zup.estrelas.zquads.dto.FeedElementDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
-import br.com.zup.estrelas.zquads.enums.FeedElementType;
 import br.com.zup.estrelas.zquads.repository.FeedElementRepository;
 import br.com.zup.estrelas.zquads.repository.SquadRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
@@ -51,7 +47,6 @@ public class FeedElementServiceImpl implements FeedElementService {
         if(user.isEmpty()) {
             return new ResponseDTO(USER_NOT_FOUND);
         }
-
 
         FeedElement feedElementDB = new FeedElement();
         BeanUtils.copyProperties (feedElementDTO, feedElementDB);
