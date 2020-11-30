@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private static final String SUCCESSFULLY_UPDATED = "THE USER WAS SUCCESSFULLY UPDATED";
     private static final String SUCESSFULLY_DELETED = "THE SECRETARIAT WAS SUCCESSFULLY DELETED";
     private static final String SKILL_SUCCESSFULLY_ADDED = "THE SKILL WAS SUCCESSFULLY ADDED";
+    private static final String SKILL_SUCCESSFULLY_DELETED = "THE SKILL WAS SUCCESSFULLY DELETED";
 
     @Autowired
     UserRepository userRepository;
@@ -121,6 +122,40 @@ public class UserServiceImpl implements UserService {
         userRepository.save(updatedUser);
 
         return new ResponseDTO(SKILL_SUCCESSFULLY_ADDED);
+    }
+
+    public ResponseDTO deleteSkill(String email, SkillDTO skillDTO) {
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isEmpty()) {
+            return new ResponseDTO(DOES_NOT_EXIST);
+        }
+
+        User updatedUser = user.get();
+
+        Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
+
+        if (skill.isEmpty()) {
+            return new ResponseDTO(SKILL_DOES_NOT_EXIST);
+        }
+
+        Skill searchedSkill = skill.get();
+        List<Skill> updatedUserSkills = updatedUser.getSkills();
+
+        for (Skill updatedUserSkill : updatedUserSkills) {
+
+            if (updatedUserSkill.equals(searchedSkill)) {
+                return new ResponseDTO(SKILL_DOES_EXIST);
+            }
+
+        }
+
+        updatedUserSkills.remove(skill.get());
+
+        userRepository.save(updatedUser);
+
+        return new ResponseDTO(SKILL_SUCCESSFULLY_DELETED);
     }
 
 }

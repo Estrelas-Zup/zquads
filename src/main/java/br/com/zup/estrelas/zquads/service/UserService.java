@@ -9,7 +9,7 @@ import br.com.zup.estrelas.zquads.dto.UserDTO;
 public interface UserService {
 
     // User
-    
+
     public ResponseDTO createUser(UserDTO userDTO);
 
     public User readUser(String email);
@@ -20,8 +20,10 @@ public interface UserService {
 
     public ResponseDTO deleteUser(String email);
 
-    
     // Skill
-    
+
     public ResponseDTO addSkill(String email, SkillDTO skillDTO);
+
+    public ResponseDTO deleteSkill(String email, SkillDTO skillDTO);
+
 }
