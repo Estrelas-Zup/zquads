@@ -18,7 +18,7 @@ public interface SquadService {
 
     public ResponseDTO deleteSquad(Long idSquad);
     
-    public ResponseDTO finishedSquad(Long idSquad);
+    public ResponseDTO finishProject(Long idSquad);
     
     public ResponseDTO addMember(User user, Long idSquad);
     
