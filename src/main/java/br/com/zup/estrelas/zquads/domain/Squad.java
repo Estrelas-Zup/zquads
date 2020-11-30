@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -24,7 +25,7 @@ public class Squad {
     @Column(name = "id_squad")
     private Long idSquad;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(name = "project_name", nullable = false)
@@ -36,7 +37,7 @@ public class Squad {
     private LocalDate startingDate = LocalDate.now();
 
     @Column(name = "finishing_date")
-    private LocalDate finishingDate;
+    private LocalDate finishingDate = null;
 
     @Column(name = "is_finished")
     private boolean isFinished = false;
@@ -45,16 +46,25 @@ public class Squad {
 
     @JsonBackReference
     @ManyToMany
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SQUAD_USER_ADMIN"))
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_USER_ADMIN"),
+            referencedColumnName = "idUser")
+    @JsonIgnore
     private List<User> admins;
+
+    @Column(name = "id_user")
+    private Long idUser;
+
+
 
     @JsonBackReference
     @ManyToMany
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SQUAD_USER_MEMBER"))
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_USER_MEMBER"),
+            referencedColumnName = "idUser")
+    @JsonIgnore
     private List<User> members;
 
     @OneToMany
-    @JoinColumn(name = "id_squad", foreignKey=@ForeignKey(name="FK_ID_SQUAD_TASK"))
+    @JoinColumn(name = "id_squad", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_TASK"))
     private List<Task> tasks;
 
     @Column(name = "feed_elements")
@@ -135,6 +145,14 @@ public class Squad {
 
     public void setAdmins(List<User> admins) {
         this.admins = admins;
+    }
+
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 
     public List<User> getMembers() {

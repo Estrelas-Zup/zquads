@@ -1,6 +1,8 @@
 package br.com.zup.estrelas.zquads.enums;
 
-public enum FeedElementType {
+import java.io.Serializable;
+
+public enum FeedElementType implements Serializable {
 
 	COMMENTARY("commentary"),
 	TASK("task");
@@ -8,7 +10,7 @@ public enum FeedElementType {
 	private String value;
 	
 	FeedElementType(String value) {
-		this.value = value;
+		this.value = value;		
 	}
 	
 	public String getValue() {

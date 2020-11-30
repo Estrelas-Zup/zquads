@@ -7,4 +7,5 @@ public interface SkillService {
     
     public List<Skill> listSkill();
     
+    
 }
