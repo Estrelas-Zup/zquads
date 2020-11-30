@@ -9,5 +9,4 @@ public interface SquadRepository extends CrudRepository<Squad, Long> {
 
     boolean existsByName(String name);
 
-
 }
