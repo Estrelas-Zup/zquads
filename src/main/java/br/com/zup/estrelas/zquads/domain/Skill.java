@@ -33,10 +33,10 @@ public class Skill {
     @Column(name = "thumbs_up", nullable = false)
     private Long thumbsUp;
     
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SKILL_USER"))
-    private User author;
+//    @JsonBackReference
+//    @ManyToOne
+//    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SKILL_USER"))
+//    private User author;
 
     // Getters and Setters
 
