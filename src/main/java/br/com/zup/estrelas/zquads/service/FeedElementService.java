@@ -1,12 +1,15 @@
 package br.com.zup.estrelas.zquads.service;
 
+import br.com.zup.estrelas.zquads.domain.Commentary;
 import br.com.zup.estrelas.zquads.dto.FeedElementDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 
 public interface FeedElementService {
 
-    public ResponseDTO createFeedElement(FeedElementDTO feedElementDTO);
+     ResponseDTO createFeedElement(FeedElementDTO feedElementDTO);
+    
+     ResponseDTO createCommentary(Commentary commentary);
         
-    public ResponseDTO deleteFeedElement(Long idFeedElement);
+     ResponseDTO deleteFeedElement(Long idFeedElement);
     
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import br.com.zup.estrelas.zquads.domain.Commentary;
 import br.com.zup.estrelas.zquads.dto.FeedElementDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.service.FeedElementService;
@@ -27,6 +28,12 @@ public class FeedElementController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseDTO createFeedElement(@Valid @RequestBody FeedElementDTO feedElementDTO) { 
         return feedElementService.createFeedElement(feedElementDTO);
+    }
+    
+    @ApiOperation(value = "Create a commentary")
+    @PostMapping(path = "/commentaries", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDTO createCommentary(@Valid @RequestBody Commentary commentary) { 
+        return feedElementService.createCommentary(commentary);
     }
     
     @ApiOperation(value = "Delete a feed element")
