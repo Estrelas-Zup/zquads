@@ -24,7 +24,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     private ApiInfo metaData() {
         return new ApiInfoBuilder().title("ZQUADS")
-                .description("\"De Z a Z.\"").version("Alpha 0.0.1")
+                .description("\"De Z a Z.\"").version("Alpha")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"").build();
     }

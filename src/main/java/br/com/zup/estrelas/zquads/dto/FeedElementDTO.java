@@ -7,28 +7,38 @@ import br.com.zup.estrelas.zquads.enums.FeedElementType;
 
 public class FeedElementDTO {
 
-    @NotNull(message="Id user is mandatory")
+    @NotNull(message = "Id user is mandatory")
     private Long idUser;
 
-    @NotBlank(message="Content is mandatory")
+    private String name;
+
+    @NotBlank(message = "Content is mandatory")
     private String content;
 
-    @NotNull(message="Date is mandatory")
+    @NotNull(message = "Date is mandatory")
     private LocalDateTime date = LocalDateTime.now();
 
-    @NotNull(message="Id Squad is mandatory")
+    @NotNull(message = "Id Squad is mandatory")
     private Long idSquad;
 
     private FeedElementType type;
 
     // Getters and Setters
-    
+
     public Long getIdUser() {
         return idUser;
     }
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getContent() {
@@ -62,5 +72,5 @@ public class FeedElementDTO {
     public void setType(FeedElementType type) {
         this.type = type;
     }
-    
+
 }
