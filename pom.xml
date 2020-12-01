@@ -13,7 +13,7 @@
 	<artifactId>zquads</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>zquads</name>
-	<description>Mudar a descrição</description>
+	<description>De Z a Z.</description>
 
 	<properties>
 		<java.version>11</java.version>

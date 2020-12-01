@@ -1,6 +1,7 @@
 package br.com.zup.estrelas.zquads.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +26,7 @@ public class SquadServiceImpl implements SquadService {
     private static final String SQUAD_FINISHED = "Squad finished";
     private static final String MEMBER_ADDED = "Membro added";
     private static final String REMOVED_MEMBER = "Removed member";
-    
+
     @Autowired
     SquadRepository squadRepository;
 
@@ -33,20 +34,29 @@ public class SquadServiceImpl implements SquadService {
     UserRepository userRepository;
 
     public ResponseDTO createSquad(SquadDTO squadDTO) {
+
         if (squadRepository.existsByName(squadDTO.getName())) {
             return new ResponseDTO(EXISTING_SQUAD);
         }
+
         Optional<User> admin = userRepository.findById(squadDTO.getIdUser());
         if (admin.isEmpty()) {
             return new ResponseDTO(AMINSTRATOR_NOT_EXIST);
         }
+
         Squad squad = new Squad();
         BeanUtils.copyProperties(squadDTO, squad);
+
         User user = admin.get();
-        List<User> admins = squad.getAdmins();
+
+        List<User> admins = new ArrayList<>();
         admins.add(user);
-        List<User> members = squad.getMembers();
+        squad.setAdmins(admins);
+
+        List<User> members = new ArrayList<>();
         members.add(user);
+        squad.setMembers(members);
+
         squadRepository.save(squad);
         return new ResponseDTO(SUCCESSFULLY_CREATED_SQUAD);
     }
@@ -83,7 +93,7 @@ public class SquadServiceImpl implements SquadService {
 
         return new ResponseDTO(SQUAD_NOT_EXIST);
     }
-    
+
     public ResponseDTO finishProject(Long idSquad) {
         Optional<Squad> squad = squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
@@ -96,14 +106,14 @@ public class SquadServiceImpl implements SquadService {
     }
 
     public ResponseDTO addMember(User user, Long idSquad) {
-        
+
         Optional<Squad> squad = squadRepository.findById(idSquad);
         List<User> members = squad.get().getMembers();
         members.add(user);
         squadRepository.save(squad.get());
         return new ResponseDTO(MEMBER_ADDED);
     }
-    
+
     public ResponseDTO removeMember(User user, Long idSquad) {
         Optional<Squad> squad = squadRepository.findById(idSquad);
         List<User> members = squad.get().getMembers();
