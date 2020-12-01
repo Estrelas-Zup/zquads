@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import br.com.zup.estrelas.zquads.domain.Commentary;
 import br.com.zup.estrelas.zquads.domain.FeedElement;
 import br.com.zup.estrelas.zquads.domain.Squad;
 import br.com.zup.estrelas.zquads.domain.User;
@@ -18,6 +19,8 @@ public class FeedElementServiceImpl implements FeedElementService {
 
     private static final String FEED_ELEMENT_CREATED_SUCESSFULLY =
             "The feed element has been created sucessfully.";
+    private static final String COMMENTARY_CREATED_SUCESSFULLY =
+            "The commentary has been created sucessfully.";
     private static final String FEED_ELEMENT_DELETE_SUCESSFULLY =
             "The feed element has been deleted sucessfully.";
     private static final String FEED_ELEMENT_NOT_FOUND = "This feed element not found.";
@@ -63,5 +66,15 @@ public class FeedElementServiceImpl implements FeedElementService {
 
         feedElementRepository.deleteById(idFeedElement);
         return new ResponseDTO(FEED_ELEMENT_DELETE_SUCESSFULLY);
+    }
+
+    @Override
+    public ResponseDTO createCommentary(Commentary commentary) {
+
+        FeedElementDTO feedElementDTO = new FeedElementDTO();
+        BeanUtils.copyProperties(commentary, feedElementDTO);
+        createFeedElement(feedElementDTO);
+
+        return new ResponseDTO(COMMENTARY_CREATED_SUCESSFULLY);
     }
 }
