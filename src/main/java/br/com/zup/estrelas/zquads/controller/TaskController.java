@@ -1,6 +1,7 @@
 package br.com.zup.estrelas.zquads.controller;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +30,7 @@ public class TaskController {
 
     @ApiOperation(value = "Create a task")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseDTO createTask(@RequestBody TaskDTO taskDto) {
+    public ResponseDTO createTask(@Valid @RequestBody TaskDTO taskDto) {
         return this.taskService.createTask(taskDto);
     }
 
@@ -47,7 +48,7 @@ public class TaskController {
 
     @ApiOperation(value = "Change attributes of a task")
     @PutMapping(path = "/{idTask}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseDTO updateTask(@PathVariable Long idTask, @RequestBody UpdateTaskDTO taskDTO) {
+    public ResponseDTO updateTask(@PathVariable Long idTask,@Valid @RequestBody UpdateTaskDTO taskDTO) {
         return this.taskService.updateTask(idTask, taskDTO);
     }
 

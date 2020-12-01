@@ -1,14 +1,19 @@
 package br.com.zup.estrelas.zquads.dto;
 
+import javax.validation.constraints.NotNull;
 
 public class TaskDTO {
-
+    
+    @NotNull(message = "Id user is mandatory")
     private Long idUser;
 
+    @NotNull(message = "Id user is mandatory")
     private String name;
 
+    @NotNull(message = "Id user is mandatory")
     private String content;
 
+    @NotNull(message = "Id user is mandatory")
     private Long idSquad;
 
     // Getters and Setters

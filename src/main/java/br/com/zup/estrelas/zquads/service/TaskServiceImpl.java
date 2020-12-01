@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Squad;
 import br.com.zup.estrelas.zquads.domain.Task;
 import br.com.zup.estrelas.zquads.domain.User;
+import br.com.zup.estrelas.zquads.dto.FeedElementDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.TaskDTO;
 import br.com.zup.estrelas.zquads.dto.UpdateTaskDTO;
+import br.com.zup.estrelas.zquads.enums.FeedElementType;
 import br.com.zup.estrelas.zquads.repository.SquadRepository;
 import br.com.zup.estrelas.zquads.repository.TaskRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
@@ -25,8 +27,7 @@ public class TaskServiceImpl implements TaskService {
     private static final String TASK_SUCCESSFULLY_FINISHED = "task successfully finished";
     private static final String TASK_NOT_FOUND = "Task Not Found";
     private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
-    private static final String THIS_USER_DOES_NOT_EXIST =
-            "the user responsible for this task doesn't exist";
+    private static final String THIS_USER_DOES_NOT_EXIST = "the user responsible for this task doesn't exist";
 
     @Autowired
     TaskRepository taskRepository;
@@ -36,6 +37,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    FeedElementService feedElement;
 
     public ResponseDTO createTask(TaskDTO taskDTO) {
 
@@ -92,15 +96,20 @@ public class TaskServiceImpl implements TaskService {
 
     public ResponseDTO finishTask(Long idTask) {
 
-        Optional<Task> task = this.taskRepository.findById(idTask);
+        Optional<Task> taskToBeQuery = this.taskRepository.findById(idTask);
 
-        if (task.isEmpty()) {
+        if (taskToBeQuery.isEmpty()) {
             return new ResponseDTO(TASK_NOT_FOUND);
         }
-
-        task.get().setFinishingDate(LocalDateTime.now());
-        task.get().setFinished(true);
-        taskRepository.save(task.get());
+        Task task = taskToBeQuery.get();
+        task.setFinishingDate(LocalDateTime.now());
+        task.setFinished(true);
+        taskRepository.save(task);
+        
+        FeedElementDTO feedElementDto = new FeedElementDTO();
+        BeanUtils.copyProperties(task, feedElementDto);
+        feedElementDto.setType(FeedElementType.TASK);
+        this.feedElement.createFeedElement(feedElementDto);
 
         return new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
     }
