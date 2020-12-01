@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "squad")
@@ -66,9 +65,8 @@ public class Squad {
     private List<Task> tasks;
 
     @Column(name = "feed_elements")
-    @JsonManagedReference
     @OneToMany
-    @JoinColumn(name = "id_squad")
+    @JoinColumn(name = "id_squad", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_FEED_ELEMENT"))
     private List<FeedElement> feedElements;
 
     // Getters and Setters

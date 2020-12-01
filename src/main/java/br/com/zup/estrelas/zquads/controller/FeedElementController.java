@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/feedElements")
-@Api(value = "FeedElement")
+@Api(value = "FeedElement", tags = "Feed Element")
 public class FeedElementController {
 
     @Autowired

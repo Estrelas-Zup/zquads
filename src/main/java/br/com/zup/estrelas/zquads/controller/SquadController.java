@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/squad")
-@Api(value = "Squad")
+@Api(value = "Squad", tags = "Squad")
 public class SquadController {
 
   

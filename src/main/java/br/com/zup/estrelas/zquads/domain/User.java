@@ -86,9 +86,8 @@ public class User {
     @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_TASK_USER"))
     private List<Task> tasks;
 
-    @JsonManagedReference
     @OneToMany
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_FEED_ELEMENT_USER"))
     private List<FeedElement> feedElements;
 
     // Getters and Setters
