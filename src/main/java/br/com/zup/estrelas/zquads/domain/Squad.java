@@ -54,8 +54,6 @@ public class Squad {
     @Column(name = "id_user")
     private Long idUser;
 
-
-
     @JsonBackReference
     @ManyToMany
     @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_USER_MEMBER"),

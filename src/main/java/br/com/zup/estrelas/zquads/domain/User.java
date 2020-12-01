@@ -83,7 +83,7 @@ public class User {
     private List<User> friends;
 
     @OneToMany
-    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_TASK_USER"))
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_TASK_USER"))
     private List<Task> tasks;
 
     @JsonManagedReference

@@ -3,7 +3,10 @@ package br.com.zup.estrelas.zquads.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import br.com.zup.estrelas.zquads.domain.Address;
+import br.com.zup.estrelas.zquads.enums.Gender;
+import br.com.zup.estrelas.zquads.enums.Race;
 import br.com.zup.estrelas.zquads.enums.Role;
+import br.com.zup.estrelas.zquads.enums.SexualOrientation;
 
 public class UserDTO {
 
@@ -26,11 +29,11 @@ public class UserDTO {
 
     private String instagram;
 
-    private String race;
+    private Race race;
 
-    private String gender;
+    private Gender gender;
 
-    private String sexualOrientation;
+    private SexualOrientation sexualOrientation;
 
     private Role role;
 
@@ -92,27 +95,27 @@ public class UserDTO {
         this.instagram = instagram;
     }
 
-    public String getRace() {
+    public Race getRace() {
         return race;
     }
 
-    public void setRace(String race) {
+    public void setRace(Race race) {
         this.race = race;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
-    public String getSexualOrientation() {
+    public SexualOrientation getSexualOrientation() {
         return sexualOrientation;
     }
 
-    public void setSexualOrientation(String sexualOrientation) {
+    public void setSexualOrientation(SexualOrientation sexualOrientation) {
         this.sexualOrientation = sexualOrientation;
     }
 

@@ -25,27 +25,30 @@ public class TaskServiceImpl implements TaskService {
     private static final String TASK_SUCCESSFULLY_FINISHED = "task successfully finished";
     private static final String TASK_NOT_FOUND = "Task Not Found";
     private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
-    private static final String THIS_USER_DOES_NOT_EXIST = "the user responsible for this task doesn't exist";
-    
+    private static final String THIS_USER_DOES_NOT_EXIST =
+            "the user responsible for this task doesn't exist";
+
     @Autowired
     TaskRepository taskRepository;
+
     @Autowired
     SquadRepository squadRepository;
+
     @Autowired
     UserRepository userRepository;
-    
+
     public ResponseDTO createTask(TaskDTO taskDTO) {
-        
+
         Optional<Squad> squad = this.squadRepository.findById(taskDTO.getIdSquad());
         if (squad.isEmpty()) {
             return new ResponseDTO(THIS_SQUAD_DOES_NOT_EXIST);
         }
-        
+
         Optional<User> user = this.userRepository.findById(taskDTO.getIdUser());
         if (user.isEmpty()) {
             return new ResponseDTO(THIS_USER_DOES_NOT_EXIST);
         }
-        
+
         Task taskDB = new Task();
         BeanUtils.copyProperties(taskDTO, taskDB);
         this.taskRepository.save(taskDB);
@@ -61,44 +64,44 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public ResponseDTO updateTask(Long idTask, UpdateTaskDTO taskDTO) {
-        
+
         Optional<Task> taskExisting = this.taskRepository.findById(idTask);
-        
+
         if (taskExisting.isEmpty()) {
             return new ResponseDTO(TASK_NOT_FOUND);
         }
-        
+
         Task updatedTask = taskExisting.get();
         BeanUtils.copyProperties(taskDTO, updatedTask);
         this.taskRepository.save(updatedTask);
-        
+
         return new ResponseDTO(TASK_SUCCESSFULLY_UPDATED);
     }
 
     public ResponseDTO deleteTask(Long idTask) {
-        
+
         Optional<Task> task = this.taskRepository.findById(idTask);
-        
+
         if (task.isEmpty()) {
             return new ResponseDTO(TASK_NOT_FOUND);
         }
-        
+
         this.taskRepository.delete(task.get());
         return new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
     }
-    
+
     public ResponseDTO finishTask(Long idTask) {
-        
+
         Optional<Task> task = this.taskRepository.findById(idTask);
-        
+
         if (task.isEmpty()) {
             return new ResponseDTO(TASK_NOT_FOUND);
         }
-        
+
         task.get().setFinishingDate(LocalDateTime.now());
         task.get().setFinished(true);
         taskRepository.save(task.get());
-        
+
         return new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
     }
 
