@@ -4,14 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import br.com.zup.estrelas.zquads.enums.SkillType;
 
 @Entity
@@ -32,11 +28,6 @@ public class Skill {
 
     @Column(name = "thumbs_up", nullable = false)
     private Long thumbsUp;
-    
-//    @JsonBackReference
-//    @ManyToOne
-//    @JoinColumn(name = "id_user", foreignKey=@ForeignKey(name="FK_ID_SKILL_USER"))
-//    private User author;
 
     // Getters and Setters
 

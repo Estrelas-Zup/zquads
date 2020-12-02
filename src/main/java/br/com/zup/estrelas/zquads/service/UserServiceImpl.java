@@ -2,7 +2,7 @@ package br.com.zup.estrelas.zquads.service;
 
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.BeanUtils;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Skill;
@@ -10,6 +10,7 @@ import br.com.zup.estrelas.zquads.domain.User;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
+import br.com.zup.estrelas.zquads.exception.GenericException;
 import br.com.zup.estrelas.zquads.repository.SkillRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
 
@@ -18,13 +19,9 @@ public class UserServiceImpl implements UserService {
 
     private static final String DOES_EXIST = "THIS USER ALREADY EXISTS";
     private static final String DOES_NOT_EXIST = "THIS USER DOES NOT EXIST";
+    private static final String SUCCESSFULLY_DELETED = "THIS USER WAS DELETED";
     private static final String SKILL_DOES_EXIST = "THIS SKILL ALREADY EXISTS";
     private static final String SKILL_DOES_NOT_EXIST = "THIS SKILL DOES NOT EXIST";
-    private static final String SUCCESSFULLY_CREATED = "THE USER WAS SUCCESSFULLY CREATED";
-    private static final String SUCCESSFULLY_UPDATED = "THE USER WAS SUCCESSFULLY UPDATED";
-    private static final String SUCESSFULLY_DELETED = "THE SECRETARIAT WAS SUCCESSFULLY DELETED";
-    private static final String SKILL_SUCCESSFULLY_ADDED = "THE SKILL WAS SUCCESSFULLY ADDED";
-    private static final String SKILL_SUCCESSFULLY_DELETED = "THE SKILL WAS SUCCESSFULLY DELETED";
 
     @Autowired
     UserRepository userRepository;
@@ -34,21 +31,19 @@ public class UserServiceImpl implements UserService {
 
     // User
 
-    public ResponseDTO createUser(UserDTO userDTO) {
+    public User createUser(UserDTO userDTO) throws GenericException {
 
         // Optional<User> user = userRepository.findByNickname(userDTO.getNickname());
-        Optional<User> user = userRepository.findByNickname(userDTO.getEmail());
+        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
 
         if (user.isPresent()) {
-            return new ResponseDTO(DOES_EXIST);
+            throw new GenericException(DOES_EXIST);
         }
 
         User createdUser = new User();
-        BeanUtils.copyProperties(userDTO, createdUser);
+        copyProperties(userDTO, createdUser);
 
-        userRepository.save(createdUser);
-
-        return new ResponseDTO(SUCCESSFULLY_CREATED);
+        return userRepository.save(createdUser);
     }
 
     public User readUser(String email) {
@@ -59,43 +54,41 @@ public class UserServiceImpl implements UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public ResponseDTO updateUser(String email, UserDTO userDTO) {
+    public User updateUser(String email, UserDTO userDTO) throws GenericException {
 
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            return new ResponseDTO(DOES_NOT_EXIST);
+            throw new GenericException(DOES_NOT_EXIST);
         }
 
         User updatedUser = user.get();
-        BeanUtils.copyProperties(userDTO, updatedUser);
+        copyProperties(userDTO, updatedUser);
 
-        userRepository.save(updatedUser);
-
-        return new ResponseDTO(SUCCESSFULLY_UPDATED);
+        return userRepository.save(updatedUser);
     }
 
-    public ResponseDTO deleteUser(String email) {
+    public ResponseDTO deleteUser(String email) throws GenericException {
 
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            return new ResponseDTO(DOES_NOT_EXIST);
+            throw new GenericException(DOES_NOT_EXIST);
         }
 
         userRepository.deleteByEmail(email);
 
-        return new ResponseDTO(SUCESSFULLY_DELETED);
+        return new ResponseDTO(SUCCESSFULLY_DELETED);
     }
 
     // Skill
 
-    public ResponseDTO addSkill(String email, SkillDTO skillDTO) {
+    public User addSkill(String email, SkillDTO skillDTO) throws GenericException {
 
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            return new ResponseDTO(DOES_NOT_EXIST);
+            throw new GenericException(DOES_NOT_EXIST);
         }
 
         User updatedUser = user.get();
@@ -103,7 +96,7 @@ public class UserServiceImpl implements UserService {
         Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
 
         if (skill.isEmpty()) {
-            return new ResponseDTO(SKILL_DOES_NOT_EXIST);
+            throw new GenericException(SKILL_DOES_NOT_EXIST);
         }
 
         Skill searchedSkill = skill.get();
@@ -112,24 +105,22 @@ public class UserServiceImpl implements UserService {
         for (Skill updatedUserSkill : updatedUserSkills) {
 
             if (updatedUserSkill.equals(searchedSkill)) {
-                return new ResponseDTO(SKILL_DOES_EXIST);
+                throw new GenericException(SKILL_DOES_EXIST);
             }
 
         }
 
         updatedUserSkills.add(skill.get());
 
-        userRepository.save(updatedUser);
-
-        return new ResponseDTO(SKILL_SUCCESSFULLY_ADDED);
+        return userRepository.save(updatedUser);
     }
 
-    public ResponseDTO deleteSkill(String email, SkillDTO skillDTO) {
+    public User deleteSkill(String email, SkillDTO skillDTO) throws GenericException {
 
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            return new ResponseDTO(DOES_NOT_EXIST);
+            throw new GenericException(DOES_NOT_EXIST);
         }
 
         User updatedUser = user.get();
@@ -137,7 +128,7 @@ public class UserServiceImpl implements UserService {
         Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
 
         if (skill.isEmpty()) {
-            return new ResponseDTO(SKILL_DOES_NOT_EXIST);
+            throw new GenericException(SKILL_DOES_NOT_EXIST);
         }
 
         Skill searchedSkill = skill.get();
@@ -146,16 +137,14 @@ public class UserServiceImpl implements UserService {
         for (Skill updatedUserSkill : updatedUserSkills) {
 
             if (updatedUserSkill.equals(searchedSkill)) {
-                return new ResponseDTO(SKILL_DOES_EXIST);
+                throw new GenericException(SKILL_DOES_EXIST);
             }
 
         }
 
         updatedUserSkills.remove(skill.get());
 
-        userRepository.save(updatedUser);
-
-        return new ResponseDTO(SKILL_SUCCESSFULLY_DELETED);
+        return userRepository.save(updatedUser);
     }
 
 }

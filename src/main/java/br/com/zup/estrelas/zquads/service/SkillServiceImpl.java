@@ -10,18 +10,14 @@ import br.com.zup.estrelas.zquads.repository.SkillRepository;
 @Service
 public class SkillServiceImpl implements SkillService {
 
-//    private static final String SKILL_REGISTERED = "Skill successfully registered.";
-//    private static final String REGISTRATION_FAILED = "Failed to register";
-
     @Autowired
     SkillRepository skillRepository;
 
     public List<Skill> listSkill() {
-
         return (List<Skill>) skillRepository.findAll();
     }
-    
-    public List<Skill> searchBySkillType(SkillType type){
+
+    public List<Skill> searchBySkillType(SkillType type) {
         return skillRepository.findByType(type);
     }
 
