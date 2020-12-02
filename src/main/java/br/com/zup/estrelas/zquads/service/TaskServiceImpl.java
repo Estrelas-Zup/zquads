@@ -14,6 +14,7 @@ import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.TaskDTO;
 import br.com.zup.estrelas.zquads.dto.UpdateTaskDTO;
 import br.com.zup.estrelas.zquads.enums.FeedElementType;
+import br.com.zup.estrelas.zquads.exception.GenericException;
 import br.com.zup.estrelas.zquads.repository.SquadRepository;
 import br.com.zup.estrelas.zquads.repository.TaskRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
@@ -21,13 +22,12 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    private static final String TASK_SUCCESSFULLY_CREATED = "task successfully created";
-    private static final String TASK_SUCCESSFULLY_UPDATED = "task successfully updated";
     private static final String TASK_SUCCESSFULLY_DELETED = "task successfully deleted";
     private static final String TASK_SUCCESSFULLY_FINISHED = "task successfully finished";
     private static final String TASK_NOT_FOUND = "Task Not Found";
     private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
-    private static final String THIS_USER_DOES_NOT_EXIST = "the user responsible for this task doesn't exist";
+    private static final String THIS_USER_DOES_NOT_EXIST =
+            "the user responsible for this task doesn't exist";
 
     @Autowired
     TaskRepository taskRepository;
@@ -37,26 +37,27 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     UserRepository userRepository;
-    
+
     @Autowired
     FeedElementService feedElement;
 
-    public ResponseDTO createTask(TaskDTO taskDTO) {
+    public Task createTask(TaskDTO taskDTO, Long idSquad) throws GenericException {
 
-        Optional<Squad> squad = this.squadRepository.findById(taskDTO.getIdSquad());
+        Optional<Squad> squad = this.squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
-            return new ResponseDTO(THIS_SQUAD_DOES_NOT_EXIST);
+            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
         }
 
         Optional<User> user = this.userRepository.findById(taskDTO.getIdUser());
         if (user.isEmpty()) {
-            return new ResponseDTO(THIS_USER_DOES_NOT_EXIST);
+            throw new GenericException(THIS_USER_DOES_NOT_EXIST);
         }
 
         Task taskDB = new Task();
         BeanUtils.copyProperties(taskDTO, taskDB);
-        this.taskRepository.save(taskDB);
-        return new ResponseDTO(TASK_SUCCESSFULLY_CREATED);
+        taskDB.setIdSquad(idSquad);
+        
+        return this.taskRepository.save(taskDB);
     }
 
     public Task readTask(Long idTask) {
@@ -67,50 +68,52 @@ public class TaskServiceImpl implements TaskService {
         return (List<Task>) this.taskRepository.findAll();
     }
 
-    public ResponseDTO updateTask(Long idTask, UpdateTaskDTO taskDTO) {
+    public Task updateTask(Long idTask, UpdateTaskDTO taskDTO) throws GenericException {
 
         Optional<Task> taskExisting = this.taskRepository.findById(idTask);
 
         if (taskExisting.isEmpty()) {
-            return new ResponseDTO(TASK_NOT_FOUND);
+            throw new GenericException(TASK_NOT_FOUND);
         }
 
         Task updatedTask = taskExisting.get();
         BeanUtils.copyProperties(taskDTO, updatedTask);
-        this.taskRepository.save(updatedTask);
 
-        return new ResponseDTO(TASK_SUCCESSFULLY_UPDATED);
+        return this.taskRepository.save(updatedTask);
     }
 
-    public ResponseDTO deleteTask(Long idTask) {
+    public ResponseDTO deleteTask(Long idTask) throws GenericException {
 
         Optional<Task> task = this.taskRepository.findById(idTask);
 
         if (task.isEmpty()) {
-            return new ResponseDTO(TASK_NOT_FOUND);
+            throw new GenericException(TASK_NOT_FOUND);
         }
 
         this.taskRepository.delete(task.get());
+
         return new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
     }
 
-    public ResponseDTO finishTask(Long idTask) {
+    public ResponseDTO finishTask(Long idTask) throws GenericException {
 
         Optional<Task> taskToBeQuery = this.taskRepository.findById(idTask);
 
         if (taskToBeQuery.isEmpty()) {
-            return new ResponseDTO(TASK_NOT_FOUND);
+            throw new GenericException(TASK_NOT_FOUND);
         }
+
         Task task = taskToBeQuery.get();
         task.setFinishingDate(LocalDateTime.now());
         task.setFinished(true);
         taskRepository.save(task);
-        
+
         FeedElementDTO feedElementDto = new FeedElementDTO();
         BeanUtils.copyProperties(task, feedElementDto);
         feedElementDto.setType(FeedElementType.TASK);
-        this.feedElement.createFeedElement(feedElementDto);
 
+        feedElement.createFeedElement(feedElementDto);
+        
         return new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
     }
 

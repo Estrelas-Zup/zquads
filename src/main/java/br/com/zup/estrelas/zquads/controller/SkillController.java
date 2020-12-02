@@ -14,7 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/skill")
+@RequestMapping("/skills")
 @Api(value = "Skill", tags = "Skill")
 public class SkillController {
 

@@ -5,25 +5,26 @@ import br.com.zup.estrelas.zquads.domain.User;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
+import br.com.zup.estrelas.zquads.exception.GenericException;
 
 public interface UserService {
 
     // User
 
-    public ResponseDTO createUser(UserDTO userDTO);
+    public User createUser(UserDTO userDTO) throws GenericException;
 
     public User readUser(String email);
 
     public List<User> listUsers();
 
-    public ResponseDTO updateUser(String email, UserDTO userDTO);
+    public User updateUser(String email, UserDTO userDTO) throws GenericException;
 
-    public ResponseDTO deleteUser(String email);
+    public ResponseDTO deleteUser(String email) throws GenericException;
 
     // Skill
 
-    public ResponseDTO addSkill(String email, SkillDTO skillDTO);
+    public User addSkill(String email, SkillDTO skillDTO) throws GenericException;
 
-    public ResponseDTO deleteSkill(String email, SkillDTO skillDTO);
+    public User deleteSkill(String email, SkillDTO skillDTO) throws GenericException;
 
 }

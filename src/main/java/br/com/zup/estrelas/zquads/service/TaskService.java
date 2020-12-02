@@ -5,19 +5,20 @@ import br.com.zup.estrelas.zquads.domain.Task;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.TaskDTO;
 import br.com.zup.estrelas.zquads.dto.UpdateTaskDTO;
+import br.com.zup.estrelas.zquads.exception.GenericException;
 
 public interface TaskService {
 
-    public ResponseDTO createTask(TaskDTO taskDTO);
+    public Task createTask(TaskDTO taskDTO, Long idSquad) throws GenericException;
 
     public Task readTask(Long idTask);
 
     public List<Task> listTasks();
 
-    public ResponseDTO updateTask(Long idTask, UpdateTaskDTO taskDTO);
+    public Task updateTask(Long idTask, UpdateTaskDTO taskDTO) throws GenericException;
 
-    public ResponseDTO deleteTask(Long idTask);
+    public ResponseDTO deleteTask(Long idTask) throws GenericException;
 
-    public ResponseDTO finishTask(Long idTask);
+    public ResponseDTO finishTask(Long idTask) throws GenericException;
 
 }
