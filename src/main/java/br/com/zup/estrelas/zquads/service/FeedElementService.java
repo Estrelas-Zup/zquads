@@ -10,8 +10,8 @@ public interface FeedElementService {
 
     FeedElement createFeedElement(FeedElementDTO feedElementDTO) throws GenericException;
 
-    FeedElement createCommentary(Commentary commentary) throws GenericException;
+    FeedElement createCommentary(Long idSquad, Commentary commentary) throws GenericException;
 
-    ResponseDTO deleteFeedElement(Long idFeedElement) throws GenericException;
+    ResponseDTO deleteFeedElement(Long idSquad, Long idFeedElement) throws GenericException;
 
 }

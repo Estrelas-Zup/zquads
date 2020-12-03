@@ -30,15 +30,15 @@ public class FeedElementController {
     @ApiOperation(value = "Create a commentary")
     @PostMapping(path = "/commentaries", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public FeedElement createCommentary(@Valid @RequestBody Commentary commentary)
+    public FeedElement createCommentary(@Valid @RequestBody Commentary commentary, @PathVariable Long idSquad)
             throws GenericException {
-        return feedElementService.createCommentary(commentary);
+        return feedElementService.createCommentary(idSquad, commentary);
     }
 
     @ApiOperation(value = "Delete a feed element")
     @DeleteMapping(path = "/{idFeedElement}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseDTO deleteFeedElement(@PathVariable Long idFeedElement) throws GenericException {
-        return feedElementService.deleteFeedElement(idFeedElement);
+    public ResponseDTO deleteFeedElement(@PathVariable Long idSquad, @PathVariable Long idFeedElement) throws GenericException {
+        return feedElementService.deleteFeedElement(idSquad, idFeedElement);
     }
 
 }

@@ -1,13 +1,15 @@
 package br.com.zup.estrelas.zquads.domain;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import br.com.zup.estrelas.zquads.enums.FeedElementType;
 
 public class Commentary {
 
+    @NotNull(message="Id user is mandatory")
     private Long idUser;
 
-    private Long idSquad;
-
+    @NotBlank(message="Content is mandatory")
     private String content;
 
     private FeedElementType type = FeedElementType.COMMENTARY;
@@ -20,14 +22,6 @@ public class Commentary {
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
-    }
-
-    public Long getIdSquad() {
-        return idSquad;
-    }
-
-    public void setIdSquad(Long idSquad) {
-        this.idSquad = idSquad;
     }
 
     public String getContent() {
