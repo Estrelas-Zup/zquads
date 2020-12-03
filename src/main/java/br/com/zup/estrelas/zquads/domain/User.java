@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import br.com.zup.estrelas.zquads.enums.Gender;
 import br.com.zup.estrelas.zquads.enums.Race;
 import br.com.zup.estrelas.zquads.enums.Role;
@@ -40,6 +42,7 @@ public class User {
     private String nickname;
 
     @Column(nullable = false)
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
     // @Column(nullable = false)
