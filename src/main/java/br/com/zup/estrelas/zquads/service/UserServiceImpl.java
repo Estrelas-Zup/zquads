@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.springframework.beans.BeanUtils.copyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Skill;
 import br.com.zup.estrelas.zquads.domain.User;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     SkillRepository skillRepository;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
     // User
 
     public User createUser(UserDTO userDTO) throws GenericException {
@@ -42,7 +45,8 @@ public class UserServiceImpl implements UserService {
 
         User createdUser = new User();
         copyProperties(userDTO, createdUser);
-
+        createdUser.setPassword(encoder.encode(createdUser.getPassword()));
+        
         return userRepository.save(createdUser);
     }
 
