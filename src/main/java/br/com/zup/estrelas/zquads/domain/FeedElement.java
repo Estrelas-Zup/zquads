@@ -22,25 +22,26 @@ public class FeedElement implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_feed_element")
+    @Column(name="id_feed_element")
     private Long idFeedElement;
 
-    @Column(name = "id_user")
-    @NotNull(message = "Id user is mandatory")
+    @Column(name="id_user")
+    @NotNull(message="Id user is mandatory")
     private Long idUser;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Content is mandatory")
+    @Column(nullable=false)
+    @NotBlank(message="Content is mandatory")
     private String content;
 
     @Column(nullable = false)
-    @NotNull(message = "Date is mandatory")
+    @NotNull(message="Date is mandatory")
     private LocalDateTime date;
 
     @Column(name = "id_squad")
-    @NotNull(message = "Id Squad is mandatory")
+    @NotNull(message="Id Squad is mandatory")
     private Long idSquad;
 
+    
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FeedElementType type;

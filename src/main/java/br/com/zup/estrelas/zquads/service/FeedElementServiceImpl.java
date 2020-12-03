@@ -1,7 +1,7 @@
 package br.com.zup.estrelas.zquads.service;
 
 import java.util.Optional;
-import org.springframework.beans.BeanUtils;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Commentary;
@@ -21,8 +21,8 @@ public class FeedElementServiceImpl implements FeedElementService {
     private static final String FEED_ELEMENT_DELETE_SUCESSFULLY =
             "Feed Element was sucessfully deleted.";
     private static final String FEED_ELEMENT_NOT_FOUND = "This feed element not found.";
-    private static final String SQUAD_NOT_FOUND = "This squad not found.";
     private static final String USER_NOT_FOUND = "This user not found.";
+    private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
 
     @Autowired
     FeedElementRepository feedElementRepository;
@@ -40,7 +40,7 @@ public class FeedElementServiceImpl implements FeedElementService {
 
         Optional<Squad> squad = squadRepository.findById(squadToBeQuery);
         if (squad.isEmpty()) {
-            throw new GenericException(SQUAD_NOT_FOUND);
+            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST );
         }
 
         Optional<User> user = userRepository.findById(idUserToBeQuery);
@@ -49,13 +49,18 @@ public class FeedElementServiceImpl implements FeedElementService {
         }
 
         FeedElement feedElementDB = new FeedElement();
-        BeanUtils.copyProperties(feedElementDTO, feedElementDB);
+        copyProperties(feedElementDTO, feedElementDB);
 
         return this.feedElementRepository.save(feedElementDB);
     }
 
-    public ResponseDTO deleteFeedElement(Long idFeedElement) throws GenericException {
+    public ResponseDTO deleteFeedElement(Long idSquad, Long idFeedElement) throws GenericException {
 
+        Optional<Squad> squad = this.squadRepository.findById(idSquad);
+        if (squad.isEmpty()) {
+            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+        }
+        
         if (!feedElementRepository.existsById(idFeedElement)) {
             throw new GenericException(FEED_ELEMENT_NOT_FOUND);
         }
@@ -64,10 +69,16 @@ public class FeedElementServiceImpl implements FeedElementService {
         return new ResponseDTO(FEED_ELEMENT_DELETE_SUCESSFULLY);
     }
 
-    public FeedElement createCommentary(Commentary commentary) throws GenericException {
+    public FeedElement createCommentary(Long idSquad, Commentary commentary) throws GenericException {
 
+        Optional<Squad> squad = this.squadRepository.findById(idSquad);
+        if (squad.isEmpty()) {
+            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+        }
+        
         FeedElementDTO feedElementDTO = new FeedElementDTO();
-        BeanUtils.copyProperties(commentary, feedElementDTO);
+        copyProperties(commentary, feedElementDTO);
+        feedElementDTO.setIdSquad(idSquad);
 
         return this.createFeedElement(feedElementDTO);
     }
