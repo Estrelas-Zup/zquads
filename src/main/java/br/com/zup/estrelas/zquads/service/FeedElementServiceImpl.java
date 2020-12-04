@@ -40,7 +40,7 @@ public class FeedElementServiceImpl implements FeedElementService {
 
         Optional<Squad> squad = squadRepository.findById(squadToBeQuery);
         if (squad.isEmpty()) {
-            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST );
+            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
         }
 
         Optional<User> user = userRepository.findById(idUserToBeQuery);
@@ -60,7 +60,7 @@ public class FeedElementServiceImpl implements FeedElementService {
         if (squad.isEmpty()) {
             throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
         }
-        
+
         if (!feedElementRepository.existsById(idFeedElement)) {
             throw new GenericException(FEED_ELEMENT_NOT_FOUND);
         }
@@ -69,13 +69,14 @@ public class FeedElementServiceImpl implements FeedElementService {
         return new ResponseDTO(FEED_ELEMENT_DELETE_SUCESSFULLY);
     }
 
-    public FeedElement createCommentary(Long idSquad, Commentary commentary) throws GenericException {
+    public FeedElement createCommentary(Long idSquad, Commentary commentary)
+            throws GenericException {
 
         Optional<Squad> squad = this.squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
             throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
         }
-        
+
         FeedElementDTO feedElementDTO = new FeedElementDTO();
         copyProperties(commentary, feedElementDTO);
         feedElementDTO.setIdSquad(idSquad);
