@@ -98,7 +98,6 @@ public class FeedElementServiceTests {
         address.setReference("Referencia teste");
 
         return address;
-
     }
 
     private static FeedElement feedElementInfo() {
@@ -161,7 +160,7 @@ public class FeedElementServiceTests {
     }
 
     @Test
-    public void mustSucceedWhenCreateAComment() throws GenericException {
+    public void mustSucceedWhenCreateACommentary() throws GenericException {
 
         Optional<User> userTest = Optional.of(userInfo());
         Optional<Squad> squadTest = Optional.of(squadInfo());
@@ -177,11 +176,11 @@ public class FeedElementServiceTests {
                 this.feedElementService.createCommentary(idSquad, commentaryTest);
         FeedElement expectedFeedElement = this.feedElementRepository.findById(1L).orElse(null);
 
-        assertEquals("Must return a sucess message", expectedFeedElement, feedElementTest);
+        assertEquals(expectedFeedElement, feedElementTest);
     }
 
     @Test(expected = GenericException.class)
-    public void mustFailWhenCreateACommentIfSquadDoesNotExists() throws GenericException {
+    public void mustFailWhenCreateACommentaryIfSquadDoesNotExists() throws GenericException {
 
         Optional<User> userTest = Optional.of(userInfo());
         Commentary commentaryTest = commentaryInfo();
@@ -194,12 +193,12 @@ public class FeedElementServiceTests {
 
         FeedElement feedElementTest = this.feedElementService.createCommentary(2L, commentaryTest);
 
-        assertEquals("Must return a fail message", GenericException.class, feedElementTest);
+        assertEquals(GenericException.class, feedElementTest);
 
     }
 
     @Test(expected = GenericException.class)
-    public void mustFailTWhenCreateACommentIfUserDoesNotExists() throws GenericException {
+    public void mustFailTWhenCreateACommentaryIfUserDoesNotExists() throws GenericException {
 
         Optional<Squad> squadTest = Optional.of(squadInfo());
         Long idSquad = squadTest.get().getIdSquad();
@@ -213,7 +212,7 @@ public class FeedElementServiceTests {
         FeedElement feedElementTest =
                 this.feedElementService.createCommentary(idSquad, commentaryTest);
 
-        assertEquals("Must return a fail message", GenericException.class, feedElementTest);
+        assertEquals(GenericException.class, feedElementTest);
     }
 
     @Test
@@ -232,7 +231,7 @@ public class FeedElementServiceTests {
         FeedElement feedElementTest = this.feedElementService.createFeedElement(feedElementDTOTest);
         FeedElement expectedFeedElement = this.feedElementRepository.findById(idUser).orElse(null);
 
-        assertEquals("Must return a sucess message", expectedFeedElement, feedElementTest);
+        assertEquals(expectedFeedElement, feedElementTest);
     }
 
     @Test(expected = GenericException.class)
@@ -248,7 +247,7 @@ public class FeedElementServiceTests {
         when(userRepository.existsById(wrongIdUser)).thenReturn(false);
         FeedElement feedElementTest = this.feedElementService.createFeedElement(feedElementDTOTest);
 
-        assertEquals("Must return a sucess message", GenericException.class, feedElementTest);
+        assertEquals(GenericException.class, feedElementTest);
     }
 
     @Test(expected = GenericException.class)
@@ -264,10 +263,10 @@ public class FeedElementServiceTests {
 
         FeedElement feedElementTest = this.feedElementService.createFeedElement(feedElementDTOTest);
 
-        assertEquals("Must return a fail message", GenericException.class, feedElementTest);
+        assertEquals(GenericException.class, feedElementTest);
     }
 
-    @Test(expected = GenericException.class)
+    @Test
     public void mustSucceedWhenDeleteAFeedElement() throws GenericException {
 
         Optional<Squad> squadTest = Optional.of(squadInfo());
@@ -277,13 +276,13 @@ public class FeedElementServiceTests {
         Long idFeedElement = feedElementTest.get().getIdFeedElement();
 
         when(squadRepository.findById(idSquad)).thenReturn(squadTest);
-        when(feedElementRepository.findById(idFeedElement)).thenReturn(feedElementTest);
+        when(feedElementRepository.existsById(idFeedElement)).thenReturn(true);
 
         ResponseDTO responseMessage =
                 this.feedElementService.deleteFeedElement(idSquad, idFeedElement);
         ResponseDTO expectedMessage = new ResponseDTO(FEED_ELEMENT_DELETE_SUCESSFULLY);
 
-        assertEquals("Must return a sucess message", expectedMessage, responseMessage);
+        assertEquals(expectedMessage, responseMessage);
     }
 
     @Test(expected = GenericException.class)
@@ -300,7 +299,7 @@ public class FeedElementServiceTests {
                 this.feedElementService.deleteFeedElement(wrongIdSquad, idFeedElement);
         ResponseDTO expectedMessage = new ResponseDTO(THIS_SQUAD_DOES_NOT_EXIST);
 
-        assertEquals("Must return a sucess message", expectedMessage, responseMessage);
+        assertEquals(expectedMessage, responseMessage);
 
     }
 
@@ -318,7 +317,7 @@ public class FeedElementServiceTests {
                 this.feedElementService.deleteFeedElement(idSquad, wrongIdFeedElement);
         ResponseDTO expectedMessage = new ResponseDTO(FEED_ELEMENT_NOT_FOUND);
 
-        assertEquals("Must return a sucess message", expectedMessage, responseMessage);
+        assertEquals(expectedMessage, responseMessage);
 
     }
 }
