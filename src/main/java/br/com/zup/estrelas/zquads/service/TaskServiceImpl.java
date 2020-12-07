@@ -1,9 +1,9 @@
 package br.com.zup.estrelas.zquads.service;
 
-import java.time.LocalDateTime;
+import static java.time.LocalDateTime.now;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Squad;
@@ -39,7 +39,7 @@ public class TaskServiceImpl implements TaskService {
     UserRepository userRepository;
 
     @Autowired
-    FeedElementService feedElement;
+    FeedElementService feedElementService;
 
     public Task createTask(TaskDTO taskDTO, Long idSquad) throws GenericException {
 
@@ -54,9 +54,8 @@ public class TaskServiceImpl implements TaskService {
         }
 
         Task taskDB = new Task();
-        BeanUtils.copyProperties(taskDTO, taskDB);
+        copyProperties(taskDTO, taskDB);
         taskDB.setIdSquad(idSquad);
-        
         return this.taskRepository.save(taskDB);
     }
 
@@ -77,9 +76,10 @@ public class TaskServiceImpl implements TaskService {
         }
 
         Task updatedTask = taskExisting.get();
-        BeanUtils.copyProperties(taskDTO, updatedTask);
+        copyProperties(taskDTO, updatedTask);
 
-        return this.taskRepository.save(updatedTask);
+        this.taskRepository.save(updatedTask);
+        return updatedTask;
     }
 
     public ResponseDTO deleteTask(Long idTask) throws GenericException {
@@ -104,15 +104,15 @@ public class TaskServiceImpl implements TaskService {
         }
 
         Task task = taskToBeQuery.get();
-        task.setFinishingDate(LocalDateTime.now());
+        task.setFinishingDate(now());
         task.setFinished(true);
         taskRepository.save(task);
 
         FeedElementDTO feedElementDto = new FeedElementDTO();
-        BeanUtils.copyProperties(task, feedElementDto);
+        copyProperties(task, feedElementDto);
         feedElementDto.setType(FeedElementType.TASK);
 
-        feedElement.createFeedElement(feedElementDto);
+        feedElementService.createFeedElement(feedElementDto);
         
         return new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
     }

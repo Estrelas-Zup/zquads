@@ -13,8 +13,6 @@ public class TaskDTO {
     @NotNull(message = "Id user is mandatory")
     private String content;
 
-    @NotNull(message = "Id user is mandatory")
-    private Long idSquad;
 
     // Getters and Setters
     
@@ -42,12 +40,5 @@ public class TaskDTO {
         this.content = content;
     }
 
-    public Long getIdSquad() {
-        return idSquad;
-    }
-
-    public void setIdSquad(Long idSquad) {
-        this.idSquad = idSquad;
-    }
     
 }
