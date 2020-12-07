@@ -50,17 +50,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(createdUser);
     }
 
-    public User readUser(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+    public User readUser(Long idUser) {
+        return userRepository.findById(idUser).orElse(null);
     }
 
     public List<User> listUsers() {
         return (List<User>) userRepository.findAll();
     }
 
-    public User updateUser(String email, UserDTO userDTO) throws GenericException {
+    public User updateUser(Long idUser, UserDTO userDTO) throws GenericException {
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
 
         if (user.isEmpty()) {
             throw new GenericException(DOES_NOT_EXIST);
@@ -72,24 +72,24 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(updatedUser);
     }
 
-    public ResponseDTO deleteUser(String email) throws GenericException {
+    public ResponseDTO deleteUser(Long idUser) throws GenericException {
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
             throw new GenericException(DOES_NOT_EXIST);
         }
 
-        userRepository.deleteByEmail(email);
+        userRepository.deleteById(idUser);
 
         return new ResponseDTO(SUCCESSFULLY_DELETED);
     }
 
     // Skill
 
-    public User addSkill(String email, SkillDTO skillDTO) throws GenericException {
+    public User addSkill(Long idUser, SkillDTO skillDTO) throws GenericException {
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
             throw new GenericException(DOES_NOT_EXIST);
@@ -119,9 +119,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(updatedUser);
     }
 
-    public User deleteSkill(String email, SkillDTO skillDTO) throws GenericException {
+    public User deleteSkill(Long idUser, SkillDTO skillDTO) throws GenericException {
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
             throw new GenericException(DOES_NOT_EXIST);

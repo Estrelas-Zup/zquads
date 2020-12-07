@@ -41,9 +41,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "List an user by your email")
-    @GetMapping(path = "/{email}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User readUser(@PathVariable String email) {
-        return userService.readUser(email);
+    @GetMapping(path = "/{idUser}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public User readUser(@PathVariable Long idUser) {
+        return userService.readUser(idUser);
     }
 
     @ApiOperation(value = "List all users")
@@ -53,29 +53,29 @@ public class UserController {
     }
 
     @ApiOperation(value = "Change attributes of an user")
-    @PutMapping(path = "/{email}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User updateUser(@PathVariable String email, @Valid @RequestBody UserDTO user) throws GenericException {
-        return userService.updateUser(email, user);
+    @PutMapping(path = "/{idUser}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public User updateUser(@PathVariable Long idUser, @Valid @RequestBody UserDTO user) throws GenericException {
+        return userService.updateUser(idUser, user);
     }
 
     @ApiOperation(value = "Delete an account")
-    @DeleteMapping(path = "/{email}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseDTO deleteUser(@PathVariable String email) throws GenericException {
-        return userService.deleteUser(email);
+    @DeleteMapping(path = "/{idUser}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDTO deleteUser(@PathVariable Long idUser) throws GenericException {
+        return userService.deleteUser(idUser);
     }
 
     // Skill
 
     @ApiOperation(value = "Add a skill in a list of an user")
-    @PutMapping(path = "/{email}/addSkill/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User addSkill(@PathVariable String email, @Valid @RequestBody SkillDTO skill) throws GenericException {
-        return userService.addSkill(email, skill);
+    @PutMapping(path = "/{idUser}/addSkill/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public User addSkill(@PathVariable Long idUser, @Valid @RequestBody SkillDTO skill) throws GenericException {
+        return userService.addSkill(idUser, skill);
     }
     
     @ApiOperation(value = "Remove a skill in a list of an user")
-    @PutMapping(path = "/{email}/deleteSkill/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User deleteSkill(@PathVariable String email, @Valid @RequestBody SkillDTO skill) throws GenericException {
-        return userService.deleteSkill(email, skill);
+    @PutMapping(path = "/{idUser}/deleteSkill/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public User deleteSkill(@PathVariable Long idUser, @Valid @RequestBody SkillDTO skill) throws GenericException {
+        return userService.deleteSkill(idUser, skill);
     }
 
 }
