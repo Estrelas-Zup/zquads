@@ -13,18 +13,18 @@ public interface UserService {
 
     public User createUser(UserDTO userDTO) throws GenericException;
 
-    public User readUser(String email);
+    public User readUser(Long idUser);
 
     public List<User> listUsers();
 
-    public User updateUser(String email, UserDTO userDTO) throws GenericException;
+    public User updateUser(Long idUser, UserDTO userDTO) throws GenericException;
 
-    public ResponseDTO deleteUser(String email) throws GenericException;
+    public ResponseDTO deleteUser(Long idUser) throws GenericException;
 
     // Skill
 
-    public User addSkill(String email, SkillDTO skillDTO) throws GenericException;
+    public User addSkill(Long idUser, SkillDTO skillDTO) throws GenericException;
 
-    public User deleteSkill(String email, SkillDTO skillDTO) throws GenericException;
+    public User deleteSkill(Long idUser, SkillDTO skillDTO) throws GenericException;
 
 }
