@@ -1,5 +1,6 @@
 package br.com.zup.estrelas.zquads.domain;
 
+import static java.time.LocalDateTime.now;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class Task {
     private Long idSquad;
 
     @Column(name = "starting_date", nullable = false)
-    private LocalDateTime startingDate = LocalDateTime.now();
+    private LocalDateTime startingDate = now();
 
     @Column(name = "finishing_date")
     private LocalDateTime finishingDate = null;
