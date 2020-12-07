@@ -2,14 +2,15 @@ package br.com.zup.estrelas.zquads.service;
 
 import static java.time.LocalDateTime.now;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.beans.BeanUtils.copyProperties;
+import static org.junit.Assert.assertEquals;
 import java.util.Optional;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.BeanUtils;
 import br.com.zup.estrelas.zquads.domain.Squad;
 import br.com.zup.estrelas.zquads.domain.Task;
 import br.com.zup.estrelas.zquads.domain.User;
@@ -61,7 +62,7 @@ public class TaskServiceTest {
         return task;
     }
    
-    private static Squad createSquad() {
+    private static Squad generateSquad() {
         Squad squad = new Squad();
         squad.setIdSquad(1l);
         return squad;
@@ -95,18 +96,19 @@ public class TaskServiceTest {
     public void createTaskSuccessfullyInDatabase() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
         Task task = new Task();
-        Optional<Squad> squad = Optional.of(createSquad());
+        copyProperties(taskRequisition, task);
+        Optional<Squad> squad = Optional.of(generateSquad());
         Optional<User> user = Optional.of(createUser());
         Long idSquad = squad.get().getIdSquad();
         Long idUser = user.get().getIdUser();
         
         when(squadRepository.findById(idSquad)).thenReturn(squad);
         when(userRepository.findById(idUser)).thenReturn(user);
-        when(taskRepository.save(task)).thenReturn(task);
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
         
         Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
         Task returnedResponse = task;
-        Assert.assertEquals("Should create a task with successfully" ,expectedResponse, returnedResponse);
+        assertEquals("Should create a task with successfully" ,expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -122,13 +124,13 @@ public class TaskServiceTest {
         
         Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
         GenericException returnedResponse =  new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
-        Assert.assertEquals("Shouldn't create a task if the squad wasn't found" ,expectedResponse, returnedResponse);
+        assertEquals("Shouldn't create a task if the squad wasn't found" ,expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
     public void dontCreateTaskIfUserNotFound() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
-        Optional<Squad> squad = Optional.of(createSquad());
+        Optional<Squad> squad = Optional.of(generateSquad());
         Optional<User> user = Optional.empty();
         Long idSquad = squad.get().getIdSquad();
         Long idUser = 1l;
@@ -138,7 +140,7 @@ public class TaskServiceTest {
         
         Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
         GenericException returnedResponse =  new GenericException(THIS_USER_DOES_NOT_EXIST);
-        Assert.assertEquals("Shouldn't create a task if the squad wasn't found" ,expectedResponse, returnedResponse);
+        assertEquals("Shouldn't create a task if the squad wasn't found" ,expectedResponse, returnedResponse);
     }
     
     @Test 
@@ -151,7 +153,7 @@ public class TaskServiceTest {
         
         Task expectedResponse = taskService.updateTask(idTask, taskUpadated);
         Task returnedResponse = task.get();
-        Assert.assertEquals("Should update a task with successfully" ,expectedResponse, returnedResponse);
+        assertEquals("Should update a task with successfully" ,expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -164,7 +166,7 @@ public class TaskServiceTest {
         
         Task expectedResponse = taskService.updateTask(idTask, taskUpadated);
         GenericException returnedResponse = new GenericException(TASK_NOT_FOUND);
-        Assert.assertEquals("Shouldn't update a task if cannot find" ,expectedResponse, returnedResponse);
+        assertEquals("Shouldn't update a task if cannot find" ,expectedResponse, returnedResponse);
     }
     
     @Test
@@ -176,7 +178,7 @@ public class TaskServiceTest {
         
         ResponseDTO expectedResponse = taskService.deleteTask(idTask);
         ResponseDTO returnedResponse = new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
-        Assert.assertEquals("", expectedResponse, returnedResponse);
+        assertEquals("", expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -188,7 +190,7 @@ public class TaskServiceTest {
         
         ResponseDTO expectedResponse = taskService.deleteTask(idTask);
         GenericException returnedResponse = new GenericException(TASK_NOT_FOUND);
-        Assert.assertEquals(expectedResponse, returnedResponse);
+        assertEquals(expectedResponse, returnedResponse);
     }
     
     @Test
@@ -200,7 +202,7 @@ public class TaskServiceTest {
         
         ResponseDTO expectedResponse = taskService.finishTask(idTask);
         ResponseDTO returnedResponse = new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
-        Assert.assertEquals(expectedResponse, returnedResponse);
+        assertEquals(expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -212,7 +214,7 @@ public class TaskServiceTest {
         
         ResponseDTO expectedResponse = taskService.finishTask(idTask);
         GenericException returnedResponse = new GenericException(TASK_NOT_FOUND);
-        Assert.assertEquals(expectedResponse, returnedResponse);
+        assertEquals(expectedResponse, returnedResponse);
     }
     
 }
