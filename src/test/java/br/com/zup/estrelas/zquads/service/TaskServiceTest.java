@@ -28,9 +28,6 @@ public class TaskServiceTest {
 
       private static final String TASK_SUCCESSFULLY_DELETED = "task successfully deleted";
       private static final String TASK_SUCCESSFULLY_FINISHED = "task successfully finished";
-      private static final String TASK_NOT_FOUND = "Task Not Found";
-      private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
-      private static final String THIS_USER_DOES_NOT_EXIST = "the user responsible for this task doesn't exist";
     
     private static Task generateTask() {
         Task task = new Task();
@@ -87,7 +84,7 @@ public class TaskServiceTest {
     SquadRepository squadRepository;
     
     @Mock
-    FeedElementService feedElementServiceh;
+    FeedElementService feedElementService;
     
     @InjectMocks
     TaskServiceImpl taskService;
@@ -122,9 +119,7 @@ public class TaskServiceTest {
         when(squadRepository.findById(idSquad)).thenReturn(squad);
         when(userRepository.findById(idUser)).thenReturn(user);
         
-        Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
-        GenericException returnedResponse =  new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
-        assertEquals("Shouldn't create a task if the squad wasn't found" ,expectedResponse, returnedResponse);
+        this.taskService.createTask(taskRequisition, idSquad);
     }
     
     @Test(expected = GenericException.class)
@@ -138,9 +133,7 @@ public class TaskServiceTest {
         when(squadRepository.findById(idSquad)).thenReturn(squad);
         when(userRepository.findById(idUser)).thenReturn(user);
         
-        Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
-        GenericException returnedResponse =  new GenericException(THIS_USER_DOES_NOT_EXIST);
-        assertEquals("Shouldn't create a task if the squad wasn't found" ,expectedResponse, returnedResponse);
+        this.taskService.createTask(taskRequisition, idSquad);
     }
     
     @Test 
@@ -164,9 +157,7 @@ public class TaskServiceTest {
         
         when(taskRepository.findById(idTask)).thenReturn(task);
         
-        Task expectedResponse = taskService.updateTask(idTask, taskUpadated);
-        GenericException returnedResponse = new GenericException(TASK_NOT_FOUND);
-        assertEquals("Shouldn't update a task if cannot find" ,expectedResponse, returnedResponse);
+        this.taskService.updateTask(idTask, taskUpadated);
     }
     
     @Test
@@ -178,7 +169,7 @@ public class TaskServiceTest {
         
         ResponseDTO expectedResponse = taskService.deleteTask(idTask);
         ResponseDTO returnedResponse = new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
-        assertEquals("", expectedResponse, returnedResponse);
+        assertEquals("Should delete a task with successfully", expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -188,9 +179,7 @@ public class TaskServiceTest {
         
         when(taskRepository.findById(1l)).thenReturn(task);
         
-        ResponseDTO expectedResponse = taskService.deleteTask(idTask);
-        GenericException returnedResponse = new GenericException(TASK_NOT_FOUND);
-        assertEquals(expectedResponse, returnedResponse);
+        this.taskService.deleteTask(idTask);
     }
     
     @Test
@@ -208,13 +197,11 @@ public class TaskServiceTest {
     @Test(expected = GenericException.class)
     public void dontFinishTaskIfNotFound() throws GenericException {
         Optional<Task> task = Optional.empty();
-        Long idTask = task.get().getIdTask();
+        Long idTask = 1l;
         
         when(taskRepository.findById(idTask)).thenReturn(task);
         
-        ResponseDTO expectedResponse = taskService.finishTask(idTask);
-        GenericException returnedResponse = new GenericException(TASK_NOT_FOUND);
-        assertEquals(expectedResponse, returnedResponse);
+        this.taskService.finishTask(idTask);
     }
     
 }
