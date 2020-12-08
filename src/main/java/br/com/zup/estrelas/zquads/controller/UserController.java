@@ -42,7 +42,7 @@ public class UserController {
 
     @ApiOperation(value = "List an user by your email")
     @GetMapping(path = "/{idUser}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User readUser(@PathVariable Long idUser) {
+    public User readUser(@PathVariable Long idUser) throws GenericException {
         return userService.readUser(idUser);
     }
 

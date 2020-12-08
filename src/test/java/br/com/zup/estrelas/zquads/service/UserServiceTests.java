@@ -1,7 +1,6 @@
 package br.com.zup.estrelas.zquads.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.beans.BeanUtils.copyProperties;
@@ -11,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import br.com.zup.estrelas.zquads.domain.User;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
@@ -28,6 +28,9 @@ public class UserServiceTests {
 
     @Mock
     SkillRepository skillRepository;
+
+    @Mock
+    BCryptPasswordEncoder encoder;
 
     @InjectMocks
     UserServiceImpl userService;
@@ -77,7 +80,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void shouldReadAnUser() {
+    public void shouldReadAnUser() throws GenericException {
 
         User user = new User();
 
@@ -93,12 +96,10 @@ public class UserServiceTests {
         assertEquals(user, foundUser);
     }
 
-    @Test
-    public void shouldNotReadAnUserWhenDoesNotExist() {
+    @Test(expected = GenericException.class)
+    public void shouldNotReadAnUserWhenDoesNotExist() throws GenericException {
 
-        User foundUser = this.userService.readUser(1L);
-
-        assertNull(foundUser);
+        this.userService.readUser(any(Long.class));
     }
 
     @Test

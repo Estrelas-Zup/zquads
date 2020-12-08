@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     BCryptPasswordEncoder encoder;
+
     // User
 
     public User createUser(UserDTO userDTO) throws GenericException {
@@ -46,12 +47,12 @@ public class UserServiceImpl implements UserService {
         User createdUser = new User();
         copyProperties(userDTO, createdUser);
         createdUser.setPassword(encoder.encode(createdUser.getPassword()));
-        
+
         return userRepository.save(createdUser);
     }
 
-    public User readUser(Long idUser) {
-        return userRepository.findById(idUser).orElse(null);
+    public User readUser(Long idUser) throws GenericException {
+        return userRepository.findById(idUser).orElseThrow(() -> new GenericException(DOES_NOT_EXIST));
     }
 
     public List<User> listUsers() {
