@@ -13,7 +13,7 @@ public interface UserService {
 
     public User createUser(UserDTO userDTO) throws GenericException;
 
-    public User readUser(Long idUser);
+    public User readUser(Long idUser) throws GenericException;
 
     public List<User> listUsers();
 
