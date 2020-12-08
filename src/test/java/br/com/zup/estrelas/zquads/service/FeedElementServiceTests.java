@@ -10,7 +10,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.junit.MockitoJUnitRunner;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import br.com.zup.estrelas.zquads.domain.Address;
 import br.com.zup.estrelas.zquads.domain.Commentary;
 import br.com.zup.estrelas.zquads.domain.FeedElement;
@@ -35,8 +37,9 @@ public class FeedElementServiceTests {
 
     private static final String FEED_ELEMENT_DELETE_SUCESSFULLY =
             "Feed Element was sucessfully deleted.";
-    private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
     private static final String FEED_ELEMENT_NOT_FOUND = "This feed element not found.";
+    private static final String USER_NOT_FOUND = "This user not found.";
+    private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
 
     @Mock
     FeedElementRepository feedElementRepository;
@@ -57,6 +60,7 @@ public class FeedElementServiceTests {
     SquadServiceImpl squadService;
 
     private static User userInfo() {
+
         User user = new User();
         List<Squad> squads = new ArrayList<Squad>();
         List<Skill> skills = new ArrayList<Skill>();
@@ -86,6 +90,7 @@ public class FeedElementServiceTests {
     }
 
     private static Address adressInfo() {
+
         Address address = new Address();
 
         address.setStreet("Rua teste");
@@ -162,162 +167,192 @@ public class FeedElementServiceTests {
     @Test
     public void mustSucceedWhenCreateACommentary() throws GenericException {
 
-        Optional<User> userTest = Optional.of(userInfo());
-        Optional<Squad> squadTest = Optional.of(squadInfo());
-        Commentary commentaryTest = commentaryInfo();
+        Optional<User> user = Optional.of(userInfo());
+        Optional<Squad> squad = Optional.of(squadInfo());
+        Commentary commentary = commentaryInfo();
 
-        Long idSquad = squadTest.get().getIdSquad();
-        Long idUser = userTest.get().getIdUser();
+        Long idSquad = squad.get().getIdSquad();
+        Long idUser = user.get().getIdUser();
 
-        when(squadRepository.findById(idSquad)).thenReturn(squadTest);
-        when(userRepository.findById(idUser)).thenReturn(userTest);
+        FeedElement expectedFeedElement = new FeedElement();
+        copyProperties(commentary, expectedFeedElement);
 
-        FeedElement feedElementTest =
-                this.feedElementService.createCommentary(idSquad, commentaryTest);
-        FeedElement expectedFeedElement = this.feedElementRepository.findById(1L).orElse(null);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(userRepository.findById(idUser)).thenReturn(user);
+        when(feedElementRepository.save(any(FeedElement.class))).thenReturn(expectedFeedElement);
 
-        assertEquals(expectedFeedElement, feedElementTest);
+        FeedElement returnedFeedElement =
+                this.feedElementService.createCommentary(idSquad, commentary);
+
+        assertEquals("Must create an commentary sucessfully", expectedFeedElement,
+                returnedFeedElement);
     }
 
     @Test(expected = GenericException.class)
     public void mustFailWhenCreateACommentaryIfSquadDoesNotExists() throws GenericException {
 
-        Optional<User> userTest = Optional.of(userInfo());
-        Commentary commentaryTest = commentaryInfo();
+        Optional<User> user = Optional.of(userInfo());
+        Optional<Squad> squad = Optional.empty();
+        Commentary commentary = commentaryInfo();
 
-        Long idUser = userTest.get().getIdUser();
+        Long idUser = user.get().getIdUser();
+        Long idSquad = 1L;
 
-        Long wrongIdSquad = 1L;
-        when(squadRepository.existsById(wrongIdSquad)).thenReturn(false);
-        when(userRepository.findById(idUser)).thenReturn(userTest);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(userRepository.findById(idUser)).thenReturn(user);
 
-        FeedElement feedElementTest = this.feedElementService.createCommentary(2L, commentaryTest);
+        FeedElement expectedFeedElement =
+                this.feedElementService.createCommentary(idSquad, commentary);
 
-        assertEquals(GenericException.class, feedElementTest);
+        GenericException returnedResponse = new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+
+        assertEquals("Must fail to create a comment if the squad does not exist", returnedResponse,
+                expectedFeedElement);
 
     }
 
     @Test(expected = GenericException.class)
     public void mustFailTWhenCreateACommentaryIfUserDoesNotExists() throws GenericException {
 
-        Optional<Squad> squadTest = Optional.of(squadInfo());
-        Long idSquad = squadTest.get().getIdSquad();
+        Optional<Squad> squad = Optional.of(squadInfo());
+        Long idSquad = squad.get().getIdSquad();
+        Optional<User> user = Optional.empty();
+        Long idUser = 1L;
 
-        Commentary commentaryTest = commentaryInfo();
+        Commentary commentary = commentaryInfo();
 
-        Long wrongIdUser = 1L;
-        when(squadRepository.findById(idSquad)).thenReturn(squadTest);
-        when(userRepository.existsById(wrongIdUser)).thenReturn(false);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(userRepository.findById(idUser)).thenReturn(user);
 
-        FeedElement feedElementTest =
-                this.feedElementService.createCommentary(idSquad, commentaryTest);
+        FeedElement expectedFeedElement =
+                this.feedElementService.createCommentary(idSquad, commentary);
 
-        assertEquals(GenericException.class, feedElementTest);
+        GenericException ReturnedResponse = new GenericException(USER_NOT_FOUND);
+        assertEquals("Must fail to create a comment if the user does not exist", ReturnedResponse,
+                expectedFeedElement);
     }
 
     @Test
     public void mustSucceedWhenCreateAFeedElement() throws GenericException {
 
-        Optional<User> userTest = Optional.of(userInfo());
-        Optional<Squad> squadTest = Optional.of(squadInfo());
-        FeedElementDTO feedElementDTOTest = feedElementDTOInfo();
+        Optional<User> user = Optional.of(userInfo());
+        Optional<Squad> squad = Optional.of(squadInfo());
+        FeedElementDTO feedElementDTO = feedElementDTOInfo();
 
-        Long idSquad = feedElementDTOTest.getIdSquad();
-        Long idUser = feedElementDTOTest.getIdUser();
+        Long idSquad = feedElementDTO.getIdSquad();
+        Long idUser = feedElementDTO.getIdUser();
 
-        when(squadRepository.findById(idSquad)).thenReturn(squadTest);
-        when(userRepository.findById(idUser)).thenReturn(userTest);
+        FeedElement expectedFeedElement = new FeedElement();
+        copyProperties(feedElementDTO, expectedFeedElement);
 
-        FeedElement feedElementTest = this.feedElementService.createFeedElement(feedElementDTOTest);
-        FeedElement expectedFeedElement = this.feedElementRepository.findById(idUser).orElse(null);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(userRepository.findById(idUser)).thenReturn(user);
+        when(feedElementRepository.save(any(FeedElement.class))).thenReturn(expectedFeedElement);
 
-        assertEquals(expectedFeedElement, feedElementTest);
+        FeedElement returnedFeedElement = this.feedElementService.createFeedElement(feedElementDTO);
+
+        assertEquals("Must create an feed element sucessfully", expectedFeedElement,
+                returnedFeedElement);
     }
 
     @Test(expected = GenericException.class)
     public void mustFailWhenCreateAFeedElementIfUserNotExists() throws GenericException {
 
-        Optional<Squad> squadTest = Optional.of(squadInfo());
+        Optional<Squad> squad = Optional.of(squadInfo());
+        Optional<User> user = Optional.empty();
 
-        FeedElementDTO feedElementDTOTest = feedElementDTOInfo();
-        Long idSquad = feedElementDTOTest.getIdSquad();
+        FeedElementDTO feedElementDTO = feedElementDTOInfo();
+        Long idSquad = feedElementDTO.getIdSquad();
+        Long idUser = 1L;
 
-        Long wrongIdUser = 1L;
-        when(squadRepository.findById(idSquad)).thenReturn(squadTest);
-        when(userRepository.existsById(wrongIdUser)).thenReturn(false);
-        FeedElement feedElementTest = this.feedElementService.createFeedElement(feedElementDTOTest);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(userRepository.findById(idUser)).thenReturn(user);
 
-        assertEquals(GenericException.class, feedElementTest);
+        FeedElement expectedFeedElement = this.feedElementService.createFeedElement(feedElementDTO);
+        GenericException returnedResponse = new GenericException(USER_NOT_FOUND);
+
+        assertEquals("Must fail to create a feed element if the user does not exist",
+                returnedResponse, expectedFeedElement);
     }
 
     @Test(expected = GenericException.class)
     public void mustFailWhenCreateAFeedElementIfSquadDoesNotExists() throws GenericException {
 
-        FeedElementDTO feedElementDTOTest = feedElementDTOInfo();
-        Optional<User> userTest = Optional.of(userInfo());
-        Long idUser = userTest.get().getIdUser();
+        Optional<Squad> squad = Optional.empty();
+        Optional<User> user = Optional.of(userInfo());
 
-        Long wrongIdSquad = 1L;
-        when(squadRepository.existsById(wrongIdSquad)).thenReturn(false);
-        when(userRepository.findById(idUser)).thenReturn(userTest);
+        Long idUser = user.get().getIdUser();
+        Long idSquad = 1L;
 
-        FeedElement feedElementTest = this.feedElementService.createFeedElement(feedElementDTOTest);
+        FeedElementDTO feedElementDTO = feedElementDTOInfo();
 
-        assertEquals(GenericException.class, feedElementTest);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(userRepository.findById(idUser)).thenReturn(user);
+
+        FeedElement ExpectedFeedElement = this.feedElementService.createFeedElement(feedElementDTO);
+        GenericException returnedResponse = new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+
+        assertEquals("Must fail to create a comment if the squad does not exist", returnedResponse,
+                ExpectedFeedElement);
     }
 
     @Test
     public void mustSucceedWhenDeleteAFeedElement() throws GenericException {
 
-        Optional<Squad> squadTest = Optional.of(squadInfo());
-        Long idSquad = squadTest.get().getIdSquad();
+        Optional<Squad> squad = Optional.of(squadInfo());
+        Long idSquad = squad.get().getIdSquad();
 
-        Optional<FeedElement> feedElementTest = Optional.of(feedElementInfo());
-        Long idFeedElement = feedElementTest.get().getIdFeedElement();
+        Optional<FeedElement> feedElement = Optional.of(feedElementInfo());
+        Long idFeedElement = feedElement.get().getIdFeedElement();
 
-        when(squadRepository.findById(idSquad)).thenReturn(squadTest);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
         when(feedElementRepository.existsById(idFeedElement)).thenReturn(true);
 
-        ResponseDTO responseMessage =
+        ResponseDTO expectedResponse =
                 this.feedElementService.deleteFeedElement(idSquad, idFeedElement);
-        ResponseDTO expectedMessage = new ResponseDTO(FEED_ELEMENT_DELETE_SUCESSFULLY);
+        ResponseDTO returnedResponse = new ResponseDTO(FEED_ELEMENT_DELETE_SUCESSFULLY);
 
-        assertEquals(expectedMessage, responseMessage);
+        assertEquals("Must delete an commentary sucessfully", returnedResponse, expectedResponse);
     }
 
     @Test(expected = GenericException.class)
     public void mustFailWhenDeleteAFeedElementIfSquadNotExists() throws GenericException {
 
-        Optional<FeedElement> feedElementTest = Optional.of(feedElementInfo());
-        Long idFeedElement = feedElementTest.get().getIdFeedElement();
+        Optional<Squad> squad = Optional.empty();
+        Long idSquad = 1L;
 
-        Long wrongIdSquad = 2L;
-        when(squadRepository.existsById(wrongIdSquad)).thenReturn(false);
-        when(feedElementRepository.findById(idFeedElement)).thenReturn(feedElementTest);
+        Optional<FeedElement> feedElement = Optional.of(feedElementInfo());
+        Long idFeedElement = feedElement.get().getIdFeedElement();
 
-        ResponseDTO responseMessage =
-                this.feedElementService.deleteFeedElement(wrongIdSquad, idFeedElement);
-        ResponseDTO expectedMessage = new ResponseDTO(THIS_SQUAD_DOES_NOT_EXIST);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(feedElementRepository.existsById(idFeedElement)).thenReturn(true);
 
-        assertEquals(expectedMessage, responseMessage);
+        ResponseDTO expectedResponse =
+                this.feedElementService.deleteFeedElement(idSquad, idFeedElement);
+        GenericException returnedReponse = new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
 
+        assertEquals("Must fail to delete a comment if the squad does not exist", returnedReponse,
+                expectedResponse);
     }
 
     @Test(expected = GenericException.class)
     public void mustFailWhenDeleteAFeedElementIfFeedElementNotExists() throws GenericException {
 
-        Optional<Squad> squadTest = Optional.of(squadInfo());
-        Long idSquad = squadTest.get().getIdSquad();
+        Optional<Squad> squad = Optional.of(squadInfo());
+        Long idSquad = squad.get().getIdSquad();
 
-        Long wrongIdFeedElement = 2L;
-        when(squadRepository.findById(idSquad)).thenReturn(squadTest);
-        when(feedElementRepository.existsById(wrongIdFeedElement)).thenReturn(false);
+        Optional<FeedElement> feedElement = Optional.empty();
+        Long idFeedElement = 1L;
 
-        ResponseDTO responseMessage =
-                this.feedElementService.deleteFeedElement(idSquad, wrongIdFeedElement);
-        ResponseDTO expectedMessage = new ResponseDTO(FEED_ELEMENT_NOT_FOUND);
+        when(squadRepository.findById(idSquad)).thenReturn(squad);
+        when(feedElementRepository.existsById(idFeedElement)).thenReturn(false);
 
-        assertEquals(expectedMessage, responseMessage);
+        ResponseDTO expectedResponse =
+                this.feedElementService.deleteFeedElement(idSquad, idFeedElement);
+        GenericException returnedResponse = new GenericException(FEED_ELEMENT_NOT_FOUND);
+
+        assertEquals("Must fail to create a comment if the feed element does not exist",
+                returnedResponse, expectedResponse);
 
     }
 }
