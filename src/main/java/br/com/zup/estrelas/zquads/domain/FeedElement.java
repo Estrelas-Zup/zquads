@@ -43,7 +43,6 @@ public class FeedElement implements Serializable {
     @NotNull(message = "Id Squad is mandatory")
     private Long idSquad;
 
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FeedElementType type;
