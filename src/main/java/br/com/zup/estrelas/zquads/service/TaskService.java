@@ -11,7 +11,7 @@ public interface TaskService {
 
     public Task createTask(TaskDTO taskDTO, Long idSquad) throws GenericException;
 
-    public Task readTask(Long idTask);
+    public Task readTask(Long idTask) throws GenericException;
 
     public List<Task> listTasks();
 

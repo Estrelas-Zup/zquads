@@ -2,6 +2,11 @@ package br.com.zup.estrelas.zquads.service;
 
 import static java.time.LocalDateTime.now;
 import static org.springframework.beans.BeanUtils.copyProperties;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.TASK_SUCCESSFULLY_DELETED;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.TASK_SUCCESSFULLY_FINISHED;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.TASK_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +27,6 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    private static final String TASK_SUCCESSFULLY_DELETED = "task successfully deleted";
-    private static final String TASK_SUCCESSFULLY_FINISHED = "task successfully finished";
-    private static final String TASK_NOT_FOUND = "Task Not Found";
-    private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
-    private static final String THIS_USER_DOES_NOT_EXIST =
-            "the user responsible for this task doesn't exist";
 
     @Autowired
     TaskRepository taskRepository;
@@ -45,12 +44,12 @@ public class TaskServiceImpl implements TaskService {
 
         Optional<Squad> squad = this.squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
-            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+            throw new GenericException(SQUAD_NOT_FOUND);
         }
 
         Optional<User> user = this.userRepository.findById(taskDTO.getIdUser());
         if (user.isEmpty()) {
-            throw new GenericException(THIS_USER_DOES_NOT_EXIST);
+            throw new GenericException(USER_NOT_FOUND);
         }
 
         Task taskDB = new Task();
@@ -59,8 +58,8 @@ public class TaskServiceImpl implements TaskService {
         return this.taskRepository.save(taskDB);
     }
 
-    public Task readTask(Long idTask) {
-        return this.taskRepository.findById(idTask).orElse(null);
+    public Task readTask(Long idTask) throws GenericException {
+        return this.taskRepository.findById(idTask).orElseThrow(() -> new GenericException(TASK_NOT_FOUND));
     }
 
     public List<Task> listTasks() {
