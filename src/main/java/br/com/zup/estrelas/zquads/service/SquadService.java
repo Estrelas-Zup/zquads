@@ -11,7 +11,7 @@ public interface SquadService {
 
     public Squad createSquad(SquadDTO squadDTO) throws GenericException;
 
-    public Squad readSquad(Long idSquad);
+    public Squad readSquad(Long idSquad) throws GenericException;
 
     public List<Squad> listSquads();
 

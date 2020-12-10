@@ -1,18 +1,22 @@
 package br.com.zup.estrelas.zquads.service;
 
-import java.time.LocalDateTime;
+import static org.springframework.beans.BeanUtils.copyProperties;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertEquals;
+import static java.time.LocalDateTime.now;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.FEED_ELEMENT_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.FEED_ELEMENT_DELETE_SUCESSFULLY;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.junit.MockitoJUnitRunner;
-import static org.springframework.beans.BeanUtils.copyProperties;
 import br.com.zup.estrelas.zquads.domain.Address;
 import br.com.zup.estrelas.zquads.domain.Commentary;
 import br.com.zup.estrelas.zquads.domain.FeedElement;
@@ -35,11 +39,6 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class FeedElementServiceTests {
 
-    private static final String FEED_ELEMENT_DELETE_SUCESSFULLY =
-            "Feed Element was sucessfully deleted.";
-    private static final String FEED_ELEMENT_NOT_FOUND = "This feed element not found.";
-    private static final String USER_NOT_FOUND = "This user not found.";
-    private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
 
     @Mock
     FeedElementRepository feedElementRepository;
@@ -112,7 +111,7 @@ public class FeedElementServiceTests {
         feedElement.setIdFeedElement(1L);
         feedElement.setIdUser(1L);
         feedElement.setName("Nome do feed element");
-        feedElement.setDate(LocalDateTime.now());
+        feedElement.setDate(now());
         feedElement.setContent("Conteúdo teste de um feed element");
         feedElement.setIdSquad(1L);
         feedElement.setType(FeedElementType.TASK);
@@ -204,7 +203,7 @@ public class FeedElementServiceTests {
         FeedElement expectedFeedElement =
                 this.feedElementService.createCommentary(idSquad, commentary);
 
-        GenericException returnedResponse = new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+        GenericException returnedResponse = new GenericException(SQUAD_NOT_FOUND);
 
         assertEquals("Must fail to create a comment if the squad does not exist", returnedResponse,
                 expectedFeedElement);
@@ -290,7 +289,7 @@ public class FeedElementServiceTests {
         when(userRepository.findById(idUser)).thenReturn(user);
 
         FeedElement ExpectedFeedElement = this.feedElementService.createFeedElement(feedElementDTO);
-        GenericException returnedResponse = new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+        GenericException returnedResponse = new GenericException(SQUAD_NOT_FOUND);
 
         assertEquals("Must fail to create a comment if the squad does not exist", returnedResponse,
                 ExpectedFeedElement);
@@ -329,7 +328,7 @@ public class FeedElementServiceTests {
 
         ResponseDTO expectedResponse =
                 this.feedElementService.deleteFeedElement(idSquad, idFeedElement);
-        GenericException returnedReponse = new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+        GenericException returnedReponse = new GenericException(SQUAD_NOT_FOUND);
 
         assertEquals("Must fail to delete a comment if the squad does not exist", returnedReponse,
                 expectedResponse);

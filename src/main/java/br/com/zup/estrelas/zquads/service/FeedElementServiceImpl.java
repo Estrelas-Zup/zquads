@@ -1,7 +1,11 @@
 package br.com.zup.estrelas.zquads.service;
 
-import java.util.Optional;
 import static org.springframework.beans.BeanUtils.copyProperties;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.FEED_ELEMENT_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.FEED_ELEMENT_DELETE_SUCESSFULLY;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Commentary;
@@ -18,11 +22,6 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @Service
 public class FeedElementServiceImpl implements FeedElementService {
 
-    private static final String FEED_ELEMENT_DELETE_SUCESSFULLY =
-            "Feed Element was sucessfully deleted.";
-    private static final String FEED_ELEMENT_NOT_FOUND = "This feed element not found.";
-    private static final String USER_NOT_FOUND = "This user not found.";
-    private static final String THIS_SQUAD_DOES_NOT_EXIST = "this squad doesn't exist";
 
     @Autowired
     FeedElementRepository feedElementRepository;
@@ -40,7 +39,7 @@ public class FeedElementServiceImpl implements FeedElementService {
 
         Optional<Squad> squad = squadRepository.findById(squadToBeQuery);
         if (squad.isEmpty()) {
-            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+            throw new GenericException(SQUAD_NOT_FOUND);
         }
 
         Optional<User> user = userRepository.findById(idUserToBeQuery);
@@ -58,7 +57,7 @@ public class FeedElementServiceImpl implements FeedElementService {
 
         Optional<Squad> squad = this.squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
-            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+            throw new GenericException(SQUAD_NOT_FOUND);
         }
 
         if (!feedElementRepository.existsById(idFeedElement)) {
@@ -74,7 +73,7 @@ public class FeedElementServiceImpl implements FeedElementService {
 
         Optional<Squad> squad = this.squadRepository.findById(idSquad);
         if (squad.isEmpty()) {
-            throw new GenericException(THIS_SQUAD_DOES_NOT_EXIST);
+            throw new GenericException(SQUAD_NOT_FOUND);
         }
 
         FeedElementDTO feedElementDTO = new FeedElementDTO();

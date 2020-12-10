@@ -1,8 +1,13 @@
 package br.com.zup.estrelas.zquads.service;
 
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_ALREADY_PRESENT;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SKILL_ALREADY_PRESENT;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SKILL_NOT_FOUND;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SUCCESSFULLY_DELETED;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.List;
 import java.util.Optional;
-import static org.springframework.beans.BeanUtils.copyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,11 +23,7 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final String DOES_EXIST = "THIS USER ALREADY EXISTS";
-    private static final String DOES_NOT_EXIST = "THIS USER DOES NOT EXIST";
-    private static final String SUCCESSFULLY_DELETED = "THIS USER WAS DELETED";
-    private static final String SKILL_DOES_EXIST = "THIS SKILL ALREADY EXISTS";
-    private static final String SKILL_DOES_NOT_EXIST = "THIS SKILL DOES NOT EXIST";
+    
 
     @Autowired
     UserRepository userRepository;
@@ -37,11 +38,10 @@ public class UserServiceImpl implements UserService {
 
     public User createUser(UserDTO userDTO) throws GenericException {
 
-        // Optional<User> user = userRepository.findByNickname(userDTO.getNickname());
-        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
+        boolean userExists = userRepository.existsByEmail(userDTO.getEmail());
 
-        if (user.isPresent()) {
-            throw new GenericException(DOES_EXIST);
+        if (userExists) {
+            throw new GenericException(USER_ALREADY_PRESENT);
         }
 
         User createdUser = new User();
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User readUser(Long idUser) throws GenericException {
-        return userRepository.findById(idUser).orElseThrow(() -> new GenericException(DOES_NOT_EXIST));
+        return userRepository.findById(idUser).orElseThrow(() -> new GenericException(USER_NOT_FOUND));
     }
 
     public List<User> listUsers() {
@@ -61,10 +61,10 @@ public class UserServiceImpl implements UserService {
 
     public User updateUser(Long idUser, UserDTO userDTO) throws GenericException {
 
-        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
+        Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
-            throw new GenericException(DOES_NOT_EXIST);
+            throw new GenericException(USER_NOT_FOUND);
         }
 
         User updatedUser = user.get();
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
-            throw new GenericException(DOES_NOT_EXIST);
+            throw new GenericException(USER_NOT_FOUND);
         }
 
         userRepository.deleteById(idUser);
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
-            throw new GenericException(DOES_NOT_EXIST);
+            throw new GenericException(USER_NOT_FOUND);
         }
 
         User updatedUser = user.get();
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
         Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
 
         if (skill.isEmpty()) {
-            throw new GenericException(SKILL_DOES_NOT_EXIST);
+            throw new GenericException(SKILL_NOT_FOUND);
         }
 
         Skill searchedSkill = skill.get();
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
         for (Skill updatedUserSkill : updatedUserSkills) {
 
             if (updatedUserSkill.equals(searchedSkill)) {
-                throw new GenericException(SKILL_DOES_EXIST);
+                throw new GenericException(SKILL_ALREADY_PRESENT);
             }
 
         }
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(idUser);
 
         if (user.isEmpty()) {
-            throw new GenericException(DOES_NOT_EXIST);
+            throw new GenericException(USER_NOT_FOUND);
         }
 
         User updatedUser = user.get();
@@ -133,21 +133,19 @@ public class UserServiceImpl implements UserService {
         Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
 
         if (skill.isEmpty()) {
-            throw new GenericException(SKILL_DOES_NOT_EXIST);
+            throw new GenericException(SKILL_NOT_FOUND);
         }
 
         Skill searchedSkill = skill.get();
         List<Skill> updatedUserSkills = updatedUser.getSkills();
 
-        for (Skill updatedUserSkill : updatedUserSkills) {
+        for (Skill skillOfList : updatedUserSkills) {
 
-            if (updatedUserSkill.equals(searchedSkill)) {
-                throw new GenericException(SKILL_DOES_EXIST);
+            if (skillOfList.equals(searchedSkill)) {
+                updatedUserSkills.remove(skillOfList);
             }
 
         }
-
-        updatedUserSkills.remove(skill.get());
 
         return userRepository.save(updatedUser);
     }

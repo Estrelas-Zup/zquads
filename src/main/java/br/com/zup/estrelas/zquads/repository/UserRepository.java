@@ -8,9 +8,11 @@ import br.com.zup.estrelas.zquads.domain.User;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
   
-    Optional<User> findByName(String name);
-
+    boolean existsByEmail(String email);
+    
     Optional<User> findByEmail(String email);
+    
+    Optional<User> findByName(String name);
 
     Optional<User> findByNickname(String nickname);
 
