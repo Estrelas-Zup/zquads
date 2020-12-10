@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.beans.BeanUtils.copyProperties;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SUCCESSFULLY_DELETED;
 import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,6 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTests {
 
-    private static final String SUCCESSFULLY_DELETED = "THIS USER WAS DELETED";
 
     @Mock
     UserRepository userRepository;

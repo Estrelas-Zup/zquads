@@ -5,6 +5,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.beans.BeanUtils.copyProperties;
 import static org.junit.Assert.assertEquals;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.TASK_SUCCESSFULLY_DELETED;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.TASK_SUCCESSFULLY_FINISHED;
 import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,8 +28,6 @@ import br.com.zup.estrelas.zquads.repository.UserRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class TaskServiceTest {
 
-      private static final String TASK_SUCCESSFULLY_DELETED = "task successfully deleted";
-      private static final String TASK_SUCCESSFULLY_FINISHED = "task successfully finished";
     
     private static Task generateTask() {
         Task task = new Task();
