@@ -31,8 +31,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    // User
-
     @ApiOperation(value = "Sign up an user")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)

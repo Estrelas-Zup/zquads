@@ -2,8 +2,6 @@ package br.com.zup.estrelas.zquads.security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.estrelas.zquads.security.JwtTokenUtil;
 import br.com.zup.estrelas.zquads.security.dto.LoginDTO;
 import br.com.zup.estrelas.zquads.security.dto.TokenDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @CrossOrigin
+@Api(value = "Login", tags = "Login")
 public class LoginController {
 
     @Autowired
@@ -29,8 +30,9 @@ public class LoginController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @ApiOperation(value = "Sign in an user")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public TokenDTO criaToken(@RequestBody LoginDTO loginInfo) throws Exception {
+    public TokenDTO createToken(@RequestBody LoginDTO loginInfo) throws Exception {
         auth(loginInfo.getEmail(), loginInfo.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginInfo.getEmail());
@@ -40,13 +42,6 @@ public class LoginController {
     }
 
     private void auth(String login, String senha) throws Exception {
-        try {
-            authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(login, senha));
-        } catch (DisabledException e) {
-            // Tratar usuário desabilitadu.
-        } catch (BadCredentialsException e) {
-            // Tratar credencial inválida.
-        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, senha));
     }
 }
