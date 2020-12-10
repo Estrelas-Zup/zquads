@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -33,21 +32,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            
+
             jwtToken = requestTokenHeader.substring(7);
+            username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 
-            try {
-                
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-                
-            } catch (IllegalArgumentException e) {
-                // Token não está presente
-            } catch (ExpiredJwtException e) {
-                // Token expirado
-            }
-
-        } else {
-            // Token não começa com Bearer
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
