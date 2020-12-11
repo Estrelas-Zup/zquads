@@ -2,6 +2,7 @@ package br.com.zup.estrelas.zquads.service;
 
 import java.util.List;
 import br.com.zup.estrelas.zquads.domain.User;
+import br.com.zup.estrelas.zquads.dto.CreateUserDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
@@ -11,7 +12,7 @@ public interface UserService {
 
     // User
 
-    public User createUser(UserDTO userDTO) throws GenericException;
+    public User createUser(CreateUserDTO userDTO) throws GenericException;
 
     public User readUser(Long idUser) throws GenericException;
 

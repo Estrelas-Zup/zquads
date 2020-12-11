@@ -1,10 +1,10 @@
 package br.com.zup.estrelas.zquads.service;
 
-import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_ALREADY_PRESENT;
-import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SKILL_ALREADY_PRESENT;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SKILL_NOT_FOUND;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SUCCESSFULLY_DELETED;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_ALREADY_PRESENT;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
 import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Skill;
 import br.com.zup.estrelas.zquads.domain.User;
+import br.com.zup.estrelas.zquads.dto.CreateUserDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     // User
 
-    public User createUser(UserDTO userDTO) throws GenericException {
+    public User createUser( CreateUserDTO userDTO) throws GenericException {
 
         boolean userExists = userRepository.existsByEmail(userDTO.getEmail());
 
