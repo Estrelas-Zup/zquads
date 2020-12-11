@@ -26,7 +26,7 @@ import br.com.zup.estrelas.zquads.repository.TaskRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TaskServiceTest {
+public class TaskServiceTests {
 
     
     private static Task generateTask() {
@@ -90,7 +90,7 @@ public class TaskServiceTest {
     TaskServiceImpl taskService;
     
     @Test
-    public void createTaskSuccessfullyInDatabase() throws GenericException {
+    public void shouldCreateTask() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
         Task task = new Task();
         copyProperties(taskRequisition, task);
@@ -105,11 +105,11 @@ public class TaskServiceTest {
         
         Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
         Task returnedResponse = task;
-        assertEquals("Should create a task with successfully" ,expectedResponse, returnedResponse);
+        assertEquals(expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
-    public void dontCreateTaskIfSquadNotFound() throws GenericException {
+    public void shouldntCreateTaskIfSquadNotFound() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
         Optional<Squad> squad = Optional.empty();
         Optional<User> user = Optional.of(createUser());
@@ -123,7 +123,7 @@ public class TaskServiceTest {
     }
     
     @Test(expected = GenericException.class)
-    public void dontCreateTaskIfUserNotFound() throws GenericException {
+    public void shouldntCreateTaskIfUserNotFound() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
         Optional<Squad> squad = Optional.of(generateSquad());
         Optional<User> user = Optional.empty();
@@ -137,7 +137,7 @@ public class TaskServiceTest {
     }
     
     @Test 
-    public void updateTaskSuccessfullyInDatabase() throws GenericException {
+    public void shouldUpdateTaskSuccessfully() throws GenericException {
         Optional<Task> task = Optional.of(generateTask());
         Long idTask = task.get().getIdTask();
         UpdateTaskDTO taskUpadated = generateTaskDtoFromUpdate();
@@ -146,7 +146,7 @@ public class TaskServiceTest {
         
         Task expectedResponse = taskService.updateTask(idTask, taskUpadated);
         Task returnedResponse = task.get();
-        assertEquals("Should update a task with successfully" ,expectedResponse, returnedResponse);
+        assertEquals(expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -169,7 +169,7 @@ public class TaskServiceTest {
         
         ResponseDTO expectedResponse = taskService.deleteTask(idTask);
         ResponseDTO returnedResponse = new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
-        assertEquals("Should delete a task with successfully", expectedResponse, returnedResponse);
+        assertEquals(expectedResponse, returnedResponse);
     }
     
     @Test(expected = GenericException.class)
