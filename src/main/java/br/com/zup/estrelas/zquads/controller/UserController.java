@@ -39,10 +39,11 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @ApiOperation(value = "List an user by your email")
-    @GetMapping(path = "/{idUser}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User readUser(@PathVariable Long idUser) throws GenericException {
-        return userService.readUser(idUser);
+    @ApiOperation(value = "Get current user info")
+    @GetMapping(path = "/userInfo", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public User readUser() throws GenericException {
+        User currentUser = userService.getCurrentUser();
+        return userService.readUser(currentUser.getIdUser());
     }
 
     @ApiOperation(value = "List all users")

@@ -9,6 +9,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.zup.estrelas.zquads.domain.Skill;
@@ -20,6 +21,7 @@ import br.com.zup.estrelas.zquads.dto.UserDTO;
 import br.com.zup.estrelas.zquads.exception.GenericException;
 import br.com.zup.estrelas.zquads.repository.SkillRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
+import br.com.zup.estrelas.zquads.security.MyUserDetails;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -149,6 +151,13 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.save(updatedUser);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        return userDetails.getUser();
     }
 
 }
