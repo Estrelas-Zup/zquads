@@ -2,6 +2,7 @@ package br.com.zup.estrelas.zquads.enums;
 
 public enum Role {
 
+    UNDEFIND("undefind"),
 	BACKEND("backend"),
 	FRONTEND("frontend"),
 	FULLSTACK("fullstack"),
