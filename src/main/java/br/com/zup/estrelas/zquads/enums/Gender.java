@@ -2,6 +2,7 @@ package br.com.zup.estrelas.zquads.enums;
 
 public enum Gender {
 
+    UNDEFIND("undefind"),
 	CISGENDER("cisgender"),
 	TRANSGENDER("transgender"),
 	OTHER("other");

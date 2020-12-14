@@ -17,9 +17,9 @@ public class CreateUserDTO {
 
     @NotBlank(message = "PASSWORD IS MANDATORY")
     private String password;
-    
+
     private Role role = Role.UNDEFIND;
-    
+
     public String getName() {
         return name;
     }
@@ -51,7 +51,7 @@ public class CreateUserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
+  
     public Role getRole() {
         return role;
     }
@@ -59,6 +59,4 @@ public class CreateUserDTO {
     public void setRole(Role role) {
         this.role = role;
     }
-    
-    
 }
