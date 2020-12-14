@@ -2,6 +2,7 @@ package br.com.zup.estrelas.zquads.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import br.com.zup.estrelas.zquads.enums.Role;
 
 public class CreateUserDTO {
     @NotBlank(message = "NAME IS MANDATORY")
@@ -16,7 +17,8 @@ public class CreateUserDTO {
 
     @NotBlank(message = "PASSWORD IS MANDATORY")
     private String password;
-
+    
+    private Role role = Role.UNDEFIND;
     
     public String getName() {
         return name;
@@ -49,4 +51,14 @@ public class CreateUserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    
+    
 }

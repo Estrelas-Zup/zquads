@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.estrelas.zquads.domain.User;
+import br.com.zup.estrelas.zquads.dto.CreateUserDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
@@ -34,11 +35,11 @@ public class UserController {
     @ApiOperation(value = "Sign up an user")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Valid @RequestBody UserDTO user) throws GenericException {
+    public User createUser(@Valid @RequestBody CreateUserDTO user) throws GenericException {
         return userService.createUser(user);
     }
 
-    @ApiOperation(value = "List an user by your email")
+    @ApiOperation(value = "List an user by your id")
     @GetMapping(path = "/{idUser}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User readUser(@PathVariable Long idUser) throws GenericException {
         return userService.readUser(idUser);

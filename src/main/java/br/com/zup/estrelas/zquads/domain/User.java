@@ -45,7 +45,6 @@ public class User {
     @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
-    // @Column(nullable = false)
     @Embedded
     private Address address;
 
@@ -64,7 +63,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SexualOrientation sexualOrientation;
 
-    // @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
