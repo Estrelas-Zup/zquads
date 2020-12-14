@@ -2,6 +2,7 @@ package br.com.zup.estrelas.zquads.enums;
 
 public enum Race {
 
+    UNDEFIND("undefind"),
     BLACK("black"),
     WHITE("white"),
     ASIAN("asian"),

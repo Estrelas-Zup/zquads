@@ -2,6 +2,7 @@ package br.com.zup.estrelas.zquads.enums;
 
 public enum SexualOrientation {
 
+    UNDEFIND("undefind"),
 	HETEROSEXUAL("heterosexual"),
 	HOMOSEXUAL("homosexual"),
 	BISEXUAL("bisexual"),
