@@ -27,4 +27,7 @@ public interface UserService {
 
     public User deleteSkill(Long idUser, SkillDTO skillDTO) throws GenericException;
 
+    // Auth
+    
+    public User getCurrentUser();
 }
