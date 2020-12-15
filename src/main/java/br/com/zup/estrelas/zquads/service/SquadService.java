@@ -19,7 +19,7 @@ public interface SquadService {
 
     public ResponseDTO deleteSquad(Long idSquad) throws GenericException;
 
-    public Squad finishProject(Long idSquad) throws GenericException;
+    public ResponseDTO finishProject(Long idSquad) throws GenericException;
 
     public Squad addMember(User user, Long idSquad) throws GenericException;
 

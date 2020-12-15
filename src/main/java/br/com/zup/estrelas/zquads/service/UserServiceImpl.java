@@ -58,9 +58,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(idUser).orElseThrow(() -> new GenericException(USER_NOT_FOUND));
     }
 
-    public List<User> listUsers() {
-        return (List<User>) userRepository.findAll();
-    }
 
     public User updateUser(Long idUser, UserDTO userDTO) throws GenericException {
 
@@ -89,6 +86,10 @@ public class UserServiceImpl implements UserService {
         return new ResponseDTO(SUCCESSFULLY_DELETED);
     }
 
+    public List<User> listUsers() {
+        return (List<User>) userRepository.findAll();
+    }
+    
     // Skill
 
     public User addSkill(Long idUser, SkillDTO skillDTO) throws GenericException {

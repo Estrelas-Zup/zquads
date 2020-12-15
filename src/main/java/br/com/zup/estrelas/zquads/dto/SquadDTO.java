@@ -11,7 +11,7 @@ public class SquadDTO {
 
     private String repository;
 
-    private long idUser;
+    private Long idUser;
 
     // Getters and Setters
 
@@ -47,11 +47,11 @@ public class SquadDTO {
         this.repository = repository;
     }
 
-    public long getIdUser() {
+    public Long getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(long idUser) {
+    public void setIdUser(Long idUser) {
         this.idUser = idUser;
     }
 

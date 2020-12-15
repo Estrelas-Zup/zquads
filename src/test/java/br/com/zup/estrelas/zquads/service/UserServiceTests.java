@@ -73,7 +73,7 @@ public class UserServiceTests {
 
         copyProperties(userDTO, expectedUser);
 
-        when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(true);
+        when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(expectedUser);
 
         User returnedUser = this.userService.createUser(userDTO);
@@ -84,51 +84,32 @@ public class UserServiceTests {
     @Test(expected = GenericException.class)
     public void shouldntCreateUserWhenAlreadyExists() throws GenericException {
 
-        Optional <User> user = Optional.of(generateUser());
-        Optional <CreateUserDTO> userDTO = Optional.of(generateUserToSignIn());
+        CreateUserDTO userDTO = generateUserToSignIn();
         
-        when(userRepository.findByEmail(userDTO.get().getEmail())).thenReturn(user);
+        when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(true);
 
-        this.userService.createUser(userDTO.get());
-    }
-
-    @Test
-    public void shouldReadAnUser() throws GenericException {
-
-        Optional<User> user = Optional.of(generateUser());
-        Long idUser = user.get().getIdUser();
-
-        when(userRepository.findById(idUser)).thenReturn(user);
-
-        User foundUser = this.userService.readUser(idUser);
-
-        assertEquals(user, foundUser);
-    }
-
-    @Test(expected = GenericException.class)
-    public void shouldNotReadAnUserWhenDoesNotExist() throws GenericException {
-
-        this.userService.readUser(any(Long.class));
+        this.userService.createUser(userDTO);
     }
 
     @Test
     public void shouldUpdateAnUserSuccessfully() throws GenericException {
 
         Optional<User> user = Optional.of(generateUser());
-        Optional<UserDTO> userDTO = Optional.of(generateUserToUpdate());
+        Long idUser = user.get().getIdUser();
+        UserDTO userDTO = generateUserToUpdate();
         
-        copyProperties(userDTO, user);
+        copyProperties(userDTO, user.get());
 
-        when(userRepository.findByEmail(userDTO.get().getEmail())).thenReturn(user);
+        when(userRepository.findById(idUser)).thenReturn(user);
         when(userRepository.save(any(User.class))).thenReturn(user.get());
 
-        User returnedUser = this.userService.updateUser(user.get().getIdUser(), userDTO.get());
-
-        assertEquals(user, returnedUser);
+        User returnedResponse = this.userService.updateUser(idUser, userDTO);
+        User expectedResponse = user.get();
+        assertEquals(returnedResponse, expectedResponse);
     }
 
     @Test(expected = GenericException.class)
-    public void shouldNotUpdateAnUserWhenDoesNotExist() throws GenericException {
+    public void shouldNotUpdateAnUserWhenNotFound() throws GenericException {
 
         UserDTO userDTO = new UserDTO();
 
@@ -143,20 +124,22 @@ public class UserServiceTests {
     public void shouldDeleteAnUserSuccessfully() throws GenericException {
 
         Optional <User> user = Optional.of(generateUser());
-
+        Long idUser = user.get().getIdUser();
+        
         when(userRepository.findById(1l)).thenReturn(user);
 
-        ResponseDTO returnedResponse = this.userService.deleteUser(user.get().getIdUser());
+        ResponseDTO returnedResponse = this.userService.deleteUser(idUser);
         ResponseDTO expectedResponse = new ResponseDTO(SUCCESSFULLY_DELETED);
 
         assertEquals(expectedResponse, returnedResponse);
     }
 
     @Test(expected = GenericException.class)
-    public void shouldNotDeleteAnUserWhenDoesNotExist() throws GenericException {
+    public void shouldntDeleteAnUserWhenNotFound() throws GenericException {
 
         when(userRepository.findById(123L)).thenReturn(Optional.empty());
 
         this.userService.deleteUser(123L);
     }
+    
 }

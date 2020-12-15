@@ -24,6 +24,7 @@ import br.com.zup.estrelas.zquads.repository.FeedElementRepository;
 import br.com.zup.estrelas.zquads.repository.SquadRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
 
+
 @RunWith(MockitoJUnitRunner.class)
 public class FeedElementServiceTests {
 
