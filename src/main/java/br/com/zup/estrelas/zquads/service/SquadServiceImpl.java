@@ -6,6 +6,7 @@ import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_ALRE
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.ADMIN_NOT_FOUND;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_NOT_FOUND;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_REMOVED;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.PROJECT_FINISHED;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +31,9 @@ public class SquadServiceImpl implements SquadService {
     UserRepository userRepository;
 
     public Squad createSquad(SquadDTO squadDTO) throws GenericException {
-
-        if (squadRepository.existsByName(squadDTO.getName())) {
+        
+        boolean existingSquad = squadRepository.existsByName(squadDTO.getName());
+        if (existingSquad) {
             throw new GenericException(SQUAD_ALREADY_PRESENT);
         }
 
@@ -78,17 +80,20 @@ public class SquadServiceImpl implements SquadService {
         return squadRepository.save(modifiedSquad);
     }
 
-    public ResponseDTO deleteSquad(Long idSquad) {
+    public ResponseDTO deleteSquad(Long idSquad) throws GenericException {
 
-        if (squadRepository.existsById(idSquad)) {
-            squadRepository.deleteById(idSquad);
-            return new ResponseDTO(SQUAD_REMOVED);
+        Optional<Squad> consultedSquad = squadRepository.findById(idSquad);
+        
+        if (consultedSquad.isEmpty()) {
+            throw new GenericException(SQUAD_NOT_FOUND);
         }
 
-        return new ResponseDTO(SQUAD_NOT_FOUND);
+        squadRepository.deleteById(idSquad);
+        return new ResponseDTO(SQUAD_REMOVED);
+        
     }
 
-    public Squad finishProject(Long idSquad) throws GenericException {
+    public ResponseDTO finishProject(Long idSquad) throws GenericException {
 
         Optional<Squad> squad = squadRepository.findById(idSquad);
 
@@ -99,7 +104,8 @@ public class SquadServiceImpl implements SquadService {
         squad.get().setFinishingDate(now());
         squad.get().setFinished(true);
 
-        return squadRepository.save(squad.get());
+        squadRepository.save(squad.get());
+        return new ResponseDTO(PROJECT_FINISHED);
     }
 
     public Squad addMember(User user, Long idSquad) {

@@ -63,7 +63,7 @@ public class SquadController {
 
     @ApiOperation(value = "Finish a project of a squad")
     @PutMapping(path = "/finish/{idSquad}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Squad finishProject(@PathVariable Long idSquad) throws GenericException {
+    public ResponseDTO finishProject(@PathVariable Long idSquad) throws GenericException {
         return squadService.finishProject(idSquad);
     }
 

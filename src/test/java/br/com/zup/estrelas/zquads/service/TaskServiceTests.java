@@ -65,7 +65,7 @@ public class TaskServiceTests {
         return squad;
     }
     
-    private static User createUser() {
+    private static User generateUser() {
         User user = new User();
         user.setIdUser(1l);
         return user;
@@ -95,7 +95,7 @@ public class TaskServiceTests {
         Task task = new Task();
         copyProperties(taskRequisition, task);
         Optional<Squad> squad = Optional.of(generateSquad());
-        Optional<User> user = Optional.of(createUser());
+        Optional<User> user = Optional.of(generateUser());
         Long idSquad = squad.get().getIdSquad();
         Long idUser = user.get().getIdUser();
         
@@ -103,21 +103,17 @@ public class TaskServiceTests {
         when(userRepository.findById(idUser)).thenReturn(user);
         when(taskRepository.save(any(Task.class))).thenReturn(task);
         
-        Task expectedResponse = taskService.createTask(taskRequisition, idSquad);
-        Task returnedResponse = task;
-        assertEquals(expectedResponse, returnedResponse);
+        Task returnedResponse = taskService.createTask(taskRequisition, idSquad);
+        Task expectedResponse = task;
+        assertEquals(returnedResponse, expectedResponse);
     }
     
     @Test(expected = GenericException.class)
     public void shouldntCreateTaskIfSquadNotFound() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
-        Optional<Squad> squad = Optional.empty();
-        Optional<User> user = Optional.of(createUser());
         Long idSquad = 1l;
-        Long idUser = user.get().getIdUser();
         
-        when(squadRepository.findById(idSquad)).thenReturn(squad);
-        when(userRepository.findById(idUser)).thenReturn(user);
+        when(squadRepository.findById(idSquad)).thenReturn(Optional.empty());
         
         this.taskService.createTask(taskRequisition, idSquad);
     }
@@ -125,13 +121,10 @@ public class TaskServiceTests {
     @Test(expected = GenericException.class)
     public void shouldntCreateTaskIfUserNotFound() throws GenericException {
         TaskDTO taskRequisition = generateTaskDto();
-        Optional<Squad> squad = Optional.of(generateSquad());
-        Optional<User> user = Optional.empty();
-        Long idSquad = squad.get().getIdSquad();
         Long idUser = 1l;
-        
-        when(squadRepository.findById(idSquad)).thenReturn(squad);
-        when(userRepository.findById(idUser)).thenReturn(user);
+        Long idSquad = 1l;
+
+        when(userRepository.findById(idUser)).thenReturn(Optional.empty());
         
         this.taskService.createTask(taskRequisition, idSquad);
     }
@@ -141,12 +134,14 @@ public class TaskServiceTests {
         Optional<Task> task = Optional.of(generateTask());
         Long idTask = task.get().getIdTask();
         UpdateTaskDTO taskUpadated = generateTaskDtoFromUpdate();
+        copyProperties(taskUpadated, task.get());
         
         when(taskRepository.findById(idTask)).thenReturn(task);
+        when(taskRepository.save(any(Task.class))).thenReturn(task.get());
         
-        Task expectedResponse = taskService.updateTask(idTask, taskUpadated);
-        Task returnedResponse = task.get();
-        assertEquals(expectedResponse, returnedResponse);
+        Task returnedResponse = taskService.updateTask(idTask, taskUpadated);
+        Task expectedResponse = task.get();
+        assertEquals(returnedResponse, expectedResponse);
     }
     
     @Test(expected = GenericException.class)
@@ -167,17 +162,16 @@ public class TaskServiceTests {
         
         when(taskRepository.findById(idTask)).thenReturn(task);
         
-        ResponseDTO expectedResponse = taskService.deleteTask(idTask);
-        ResponseDTO returnedResponse = new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
-        assertEquals(expectedResponse, returnedResponse);
+        ResponseDTO returnedResponse = taskService.deleteTask(idTask);
+        ResponseDTO expectedResponse = new ResponseDTO(TASK_SUCCESSFULLY_DELETED);
+        assertEquals(returnedResponse, expectedResponse);
     }
     
     @Test(expected = GenericException.class)
     public void dontDeleteTaskIfNotFound() throws GenericException {
-        Optional<Task> task = Optional.empty();
         Long idTask = 1l;
         
-        when(taskRepository.findById(1l)).thenReturn(task);
+        when(taskRepository.findById(1l)).thenReturn(Optional.empty());
         
         this.taskService.deleteTask(idTask);
     }
@@ -189,17 +183,16 @@ public class TaskServiceTests {
         
         when(taskRepository.findById(idTask)).thenReturn(task);
         
-        ResponseDTO expectedResponse = taskService.finishTask(idTask);
-        ResponseDTO returnedResponse = new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
-        assertEquals(expectedResponse, returnedResponse);
+        ResponseDTO returnedResponse = taskService.finishTask(idTask);
+        ResponseDTO expectedResponse = new ResponseDTO(TASK_SUCCESSFULLY_FINISHED);
+        assertEquals(returnedResponse, expectedResponse);
     }
     
     @Test(expected = GenericException.class)
     public void dontFinishTaskIfNotFound() throws GenericException {
-        Optional<Task> task = Optional.empty();
         Long idTask = 1l;
         
-        when(taskRepository.findById(idTask)).thenReturn(task);
+        when(taskRepository.findById(idTask)).thenReturn(Optional.empty());
         
         this.taskService.finishTask(idTask);
     }
