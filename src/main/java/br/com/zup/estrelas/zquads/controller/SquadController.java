@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,5 +67,16 @@ public class SquadController {
     public ResponseDTO finishProject(@PathVariable Long idSquad) throws GenericException {
         return squadService.finishProject(idSquad);
     }
+    
+    @ApiOperation(value = "Add a member in a Squad")
+    @PatchMapping(path = "/add/{idSquad}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDTO addMember(@PathVariable Long idSquad, @RequestBody Long idUser) throws GenericException {
+        return squadService.addMember(idUser, idSquad);
+    }
 
+    @ApiOperation(value = "Remove a member in a Squad")
+    @PatchMapping(path = "/remove/{idSquad}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDTO removeMember(@PathVariable Long idSquad, @RequestBody Long idUser) throws GenericException {
+        return squadService.removeMember(idUser, idSquad);
+    }
 }
