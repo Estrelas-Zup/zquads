@@ -9,11 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "squad")
@@ -43,22 +44,15 @@ public class Squad {
 
     private String repository;
 
-    @JsonBackReference
     @ManyToMany
-    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_USER_ADMIN"),
-            referencedColumnName = "idUser")
-    @JsonIgnore
-    private List<User> admins;
+    @JoinTable(name = "squad_user",
+        joinColumns = {@JoinColumn(name = "id_squad")},
+        inverseJoinColumns = {@JoinColumn(name = "id_user")})
+    private List<User> members;
 
     @Column(name = "id_user")
+    @JsonProperty(access = Access.WRITE_ONLY)
     private Long idUser;
-
-    @JsonBackReference
-    @ManyToMany
-    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_USER_MEMBER"),
-            referencedColumnName = "idUser")
-    @JsonIgnore
-    private List<User> members;
 
     @OneToMany
     @JoinColumn(name = "id_squad", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_TASK"))
@@ -133,14 +127,6 @@ public class Squad {
 
     public void setRepository(String repository) {
         this.repository = repository;
-    }
-
-    public List<User> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins(List<User> admins) {
-        this.admins = admins;
     }
 
     public Long getIdUser() {

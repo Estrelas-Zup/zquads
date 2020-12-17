@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -45,7 +46,6 @@ public class User {
     @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
-    // @Column(nullable = false)
     @Embedded
     private Address address;
 
@@ -55,23 +55,20 @@ public class User {
     private String instagram;
 
     @Enumerated(EnumType.STRING)
-    private Race race;
+    private Race race = Race.UNDEFIND;
 
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender gender = Gender.UNDEFIND;
 
     @Column(name = "sexual_orientation")
     @Enumerated(EnumType.STRING)
-    private SexualOrientation sexualOrientation;
+    private SexualOrientation sexualOrientation = SexualOrientation.UNDEFIND;
 
-    // @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.UNDEFIND;
 
-    @JsonManagedReference
-    @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "id_user"),
-            inverseJoinColumns = @JoinColumn(name = "id_squad"))
+    @ManyToMany(mappedBy = "members")
+    @JsonIgnore
     private List<Squad> squads;
 
     @JsonManagedReference
@@ -231,5 +228,4 @@ public class User {
     public void setFeedElements(List<FeedElement> feedElements) {
         this.feedElements = feedElements;
     }
-
 }

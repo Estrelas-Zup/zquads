@@ -1,12 +1,13 @@
 package br.com.zup.estrelas.zquads.service;
 
-import static java.time.LocalDate.now;
-import static org.springframework.beans.BeanUtils.copyProperties;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.PROJECT_FINISHED;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_ALREADY_PRESENT;
-import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.ADMIN_NOT_FOUND;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_NOT_FOUND;
 import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.SQUAD_REMOVED;
-import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.PROJECT_FINISHED;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_ALREADY_PRESENT;
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
+import static java.time.LocalDate.now;
+import static org.springframework.beans.BeanUtils.copyProperties;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,17 +40,13 @@ public class SquadServiceImpl implements SquadService {
 
         Optional<User> admin = userRepository.findById(squadDTO.getIdUser());
         if (admin.isEmpty()) {
-            throw new GenericException(ADMIN_NOT_FOUND);
+            throw new GenericException(USER_NOT_FOUND);
         }
 
         Squad squad = new Squad();
         copyProperties(squadDTO, squad);
 
         User user = admin.get();
-
-        List<User> admins = new ArrayList<>();
-        admins.add(user);
-        squad.setAdmins(admins);
 
         List<User> members = new ArrayList<>();
         members.add(user);
@@ -108,22 +105,45 @@ public class SquadServiceImpl implements SquadService {
         return new ResponseDTO(PROJECT_FINISHED);
     }
 
-    public Squad addMember(User user, Long idSquad) {
+    public ResponseDTO addMember(Long idUser, Long idSquad) throws GenericException {
 
         Optional<Squad> squad = squadRepository.findById(idSquad);
+        Optional<User> member = userRepository.findById(idUser);
+        
+        if (member.isEmpty()) {
+            throw new GenericException(USER_NOT_FOUND);
+        }
         List<User> members = squad.get().getMembers();
-        members.add(user);
-
-        return squadRepository.save(squad.get());
+        
+        if (members.contains(member.get())) {
+            throw new GenericException(USER_ALREADY_PRESENT);
+        }
+        
+        members.add(member.get());
+        squadRepository.save(squad.get());
+        
+        return new ResponseDTO("Add member successfully");
     }
 
-    public Squad removeMember(User user, Long idSquad) {
+    public ResponseDTO removeMember(Long idUser, Long idSquad) throws GenericException {
 
         Optional<Squad> squad = squadRepository.findById(idSquad);
+        Optional<User> member = userRepository.findById(idUser);
+        
+        if (member.isEmpty()) {
+            throw new GenericException(USER_NOT_FOUND);
+        }
+        
         List<User> members = squad.get().getMembers();
-        members.remove(user);
-
-        return squadRepository.save(squad.get());
+        
+        
+        if (members.contains(member.get())) {
+            members.remove(member.get());
+        }
+        
+        squadRepository.save(squad.get());
+        
+        return new ResponseDTO("Remove member successfully");
     }
 
 }

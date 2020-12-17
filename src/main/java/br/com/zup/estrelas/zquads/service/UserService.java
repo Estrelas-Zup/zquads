@@ -14,7 +14,7 @@ public interface UserService {
 
     public User createUser(CreateUserDTO userDTO) throws GenericException;
 
-    public User readUser(Long idUser) throws GenericException;
+    public User searchUser(Long idUser) throws GenericException;
 
     public List<User> listUsers();
 

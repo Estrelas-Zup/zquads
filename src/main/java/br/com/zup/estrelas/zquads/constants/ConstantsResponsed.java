@@ -15,7 +15,6 @@ public class ConstantsResponsed {
     public static final String SQUAD_NOT_FOUND = "Squad does not exist!";
     public static final String SQUAD_REMOVED = "Squad removed";
     public static final String SQUAD_ALREADY_PRESENT = "Existing squad";
-    public static final String ADMIN_NOT_FOUND = "Adminstrator does not exist";
     public static final String PROJECT_FINISHED = "Project successfully finished";
     
     //Tasks

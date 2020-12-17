@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(createdUser);
     }
 
-    public User readUser(Long idUser) throws GenericException {
+    public User searchUser(Long idUser) throws GenericException {
         return userRepository.findById(idUser).orElseThrow(() -> new GenericException(USER_NOT_FOUND));
     }
 
@@ -111,12 +111,8 @@ public class UserServiceImpl implements UserService {
         Skill searchedSkill = skill.get();
         List<Skill> updatedUserSkills = updatedUser.getSkills();
 
-        for (Skill updatedUserSkill : updatedUserSkills) {
-
-            if (updatedUserSkill.equals(searchedSkill)) {
-                throw new GenericException(SKILL_ALREADY_PRESENT);
-            }
-
+        if (updatedUserSkills.contains(searchedSkill)) {
+            throw new GenericException(SKILL_ALREADY_PRESENT);
         }
 
         updatedUserSkills.add(skill.get());
@@ -126,13 +122,12 @@ public class UserServiceImpl implements UserService {
 
     public User deleteSkill(Long idUser, SkillDTO skillDTO) throws GenericException {
 
-        Optional<User> user = userRepository.findById(idUser);
+        Optional<User> searchedUser = userRepository.findById(idUser);
 
-        if (user.isEmpty()) {
+        if (searchedUser.isEmpty()) {
             throw new GenericException(USER_NOT_FOUND);
         }
-
-        User updatedUser = user.get();
+        User user = searchedUser.get();
 
         Optional<Skill> skill = skillRepository.findByName(skillDTO.getName());
 
@@ -141,17 +136,13 @@ public class UserServiceImpl implements UserService {
         }
 
         Skill searchedSkill = skill.get();
-        List<Skill> updatedUserSkills = updatedUser.getSkills();
+        List<Skill> listUserSkills = user.getSkills();
 
-        for (Skill skillOfList : updatedUserSkills) {
-
-            if (skillOfList.equals(searchedSkill)) {
-                updatedUserSkills.remove(skillOfList);
-            }
-
+        if (listUserSkills.contains(searchedSkill)) {
+            listUserSkills.remove(searchedSkill);
         }
 
-        return userRepository.save(updatedUser);
+        return userRepository.save(user);
     }
 
     @Override

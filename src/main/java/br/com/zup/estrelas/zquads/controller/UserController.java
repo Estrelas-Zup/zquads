@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,7 +44,7 @@ public class UserController {
     @GetMapping(path = "/userInfo", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User readUser() throws GenericException {
         User currentUser = userService.getCurrentUser();
-        return userService.readUser(currentUser.getIdUser());
+        return userService.searchUser(currentUser.getIdUser());
     }
 
     @ApiOperation(value = "List all users")
@@ -67,15 +68,15 @@ public class UserController {
     // Skill
 
     @ApiOperation(value = "Add a skill in a list of an user")
-    @PutMapping(path = "/{idUser}/addSkill/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PatchMapping(path = "/{idUser}/addSkill", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User addSkill(@PathVariable Long idUser, @Valid @RequestBody SkillDTO skill) throws GenericException {
         return userService.addSkill(idUser, skill);
     }
     
     @ApiOperation(value = "Remove a skill in a list of an user")
-    @PutMapping(path = "/{idUser}/deleteSkill/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PatchMapping(path = "/{idUser}/deleteSkill", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User deleteSkill(@PathVariable Long idUser, @Valid @RequestBody SkillDTO skill) throws GenericException {
         return userService.deleteSkill(idUser, skill);
     }
-
+    
 }
