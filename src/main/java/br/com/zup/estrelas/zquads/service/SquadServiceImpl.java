@@ -31,6 +31,9 @@ public class SquadServiceImpl implements SquadService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+    
     public Squad createSquad(SquadDTO squadDTO) throws GenericException {
         
         boolean existingSquad = squadRepository.existsByName(squadDTO.getName());
@@ -59,8 +62,9 @@ public class SquadServiceImpl implements SquadService {
         return squadRepository.findById(idSquad).orElseThrow(() -> new GenericException(SQUAD_NOT_FOUND));
     }
 
-    public List<Squad> listSquads() {
-        return (List<Squad>) squadRepository.findAll();
+    public List<Squad> listSquadsCurrentUser() {
+        User user = userService.getCurrentUser();
+        return user.getSquads();
     }
 
     public Squad updateSquad(Long idSquad, SquadDTO squadDTO) throws GenericException {

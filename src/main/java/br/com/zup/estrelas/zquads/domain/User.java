@@ -54,6 +54,9 @@ public class User {
 
     private String instagram;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+    
     @Enumerated(EnumType.STRING)
     private Race race = Race.UNDEFIND;
 
@@ -157,6 +160,14 @@ public class User {
         this.instagram = instagram;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
     public Race getRace() {
         return race;
     }

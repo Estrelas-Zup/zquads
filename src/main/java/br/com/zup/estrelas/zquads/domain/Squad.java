@@ -53,6 +53,9 @@ public class Squad {
     @Column(name = "id_user")
     @JsonProperty(access = Access.WRITE_ONLY)
     private Long idUser;
+    
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @OneToMany
     @JoinColumn(name = "id_squad", foreignKey = @ForeignKey(name = "FK_ID_SQUAD_TASK"))
@@ -135,6 +138,14 @@ public class Squad {
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<User> getMembers() {

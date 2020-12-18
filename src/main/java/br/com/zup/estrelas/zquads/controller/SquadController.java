@@ -29,7 +29,7 @@ public class SquadController {
 
     @Autowired
     SquadService squadService;
-
+    
     @ApiOperation(value = "Create a squad")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,10 +37,10 @@ public class SquadController {
         return squadService.createSquad(squad);
     }
 
-    @ApiOperation(value = "List all squads")
+    @ApiOperation(value = "List squads of a currentUser")
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Squad> listSquads() throws GenericException {
-        return squadService.listSquads();
+    public List<Squad> listSquadsCurrentUser() throws GenericException {
+        return squadService.listSquadsCurrentUser();
     }
 
     @ApiOperation(value = "List a squad by your ID")
