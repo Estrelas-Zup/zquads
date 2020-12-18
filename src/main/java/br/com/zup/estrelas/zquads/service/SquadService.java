@@ -12,7 +12,7 @@ public interface SquadService {
 
     public Squad readSquad(Long idSquad) throws GenericException;
 
-    public List<Squad> listSquads();
+    public List<Squad> listSquadsCurrentUser();
 
     public Squad updateSquad(Long idSquad, SquadDTO squadDTO) throws GenericException;
 
