@@ -14,6 +14,12 @@ public interface SquadService {
 
     public List<Squad> listSquadsCurrentUser();
 
+    public List<Squad> listSquads();
+    
+    public List<Squad> listByRepository(String repository);
+    
+    public List<Squad> listByName(String name);
+    
     public Squad updateSquad(Long idSquad, SquadDTO squadDTO) throws GenericException;
 
     public ResponseDTO deleteSquad(Long idSquad) throws GenericException;

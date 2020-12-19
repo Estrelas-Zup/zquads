@@ -66,6 +66,18 @@ public class SquadServiceImpl implements SquadService {
         User user = userService.getCurrentUser();
         return user.getSquads();
     }
+    
+    public List<Squad> listSquads() {
+        return (List<Squad>) squadRepository.findAll();
+    }
+    
+    public List<Squad> listByRepository(String repository) {
+        return squadRepository.findSquadByRepositoryLike(repository);
+    }
+    
+    public List<Squad> listByName(String name) {
+        return squadRepository.findSquadByNameLike(name);
+    }
 
     public Squad updateSquad(Long idSquad, SquadDTO squadDTO) throws GenericException {
 

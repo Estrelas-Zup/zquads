@@ -18,6 +18,10 @@ import br.com.zup.estrelas.zquads.dto.CreateUserDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
+import br.com.zup.estrelas.zquads.enums.Gender;
+import br.com.zup.estrelas.zquads.enums.Race;
+import br.com.zup.estrelas.zquads.enums.Role;
+import br.com.zup.estrelas.zquads.enums.SexualOrientation;
 import br.com.zup.estrelas.zquads.exception.GenericException;
 import br.com.zup.estrelas.zquads.repository.SkillRepository;
 import br.com.zup.estrelas.zquads.repository.UserRepository;
@@ -88,6 +92,26 @@ public class UserServiceImpl implements UserService {
 
     public List<User> listUsers() {
         return (List<User>) userRepository.findAll();
+    }
+    
+    public List<User> listUsersByName(String name) {
+        return userRepository.findUserByNameLike(name);
+    }
+
+    public List<User> listUsersByGender(Gender gender) {
+        return userRepository.findByGender(gender);
+    }
+    
+    public List<User> listUsersByRace(Race race) {
+        return userRepository.findByRace(race);
+    }
+    
+    public List<User> listUsersBySexOrientation(SexualOrientation sexOrientation) {
+        return userRepository.findBySexualOrientation(sexOrientation);
+    }
+    
+    public List<User> listUsersByRole(Role role) {
+        return userRepository.findByRole(role);
     }
     
     // Skill
