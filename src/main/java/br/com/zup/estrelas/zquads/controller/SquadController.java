@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.estrelas.zquads.domain.Squad;
@@ -41,6 +42,24 @@ public class SquadController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Squad> listSquadsCurrentUser() throws GenericException {
         return squadService.listSquadsCurrentUser();
+    }
+    
+    @ApiOperation(value = "List all Squads")
+    @GetMapping(path = "/all", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Squad> listSquads() {
+        return squadService.listSquads();
+    }
+    
+    @ApiOperation(value = "List Squads by Repository")
+    @GetMapping(path = "/{repository}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Squad> listSquadsByRep(@RequestParam(name = "repository") String repository) {
+        return squadService.listByRepository(repository);
+    }
+    
+    @ApiOperation(value = "List Squads by Name")
+    @GetMapping(path = "/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Squad> listSquadsByName(@RequestParam(name = "name") String name) {
+        return squadService.listByName(name);
     }
 
     @ApiOperation(value = "List a squad by your ID")

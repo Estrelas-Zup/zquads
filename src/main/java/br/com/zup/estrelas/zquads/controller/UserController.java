@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.estrelas.zquads.domain.User;
@@ -20,6 +21,10 @@ import br.com.zup.estrelas.zquads.dto.CreateUserDTO;
 import br.com.zup.estrelas.zquads.dto.ResponseDTO;
 import br.com.zup.estrelas.zquads.dto.SkillDTO;
 import br.com.zup.estrelas.zquads.dto.UserDTO;
+import br.com.zup.estrelas.zquads.enums.Gender;
+import br.com.zup.estrelas.zquads.enums.Race;
+import br.com.zup.estrelas.zquads.enums.Role;
+import br.com.zup.estrelas.zquads.enums.SexualOrientation;
 import br.com.zup.estrelas.zquads.exception.GenericException;
 import br.com.zup.estrelas.zquads.service.UserService;
 import io.swagger.annotations.Api;
@@ -51,6 +56,36 @@ public class UserController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<User> listUsers() {
         return userService.listUsers();
+    }
+    
+    @ApiOperation(value = "List users by part of name")
+    @GetMapping(path = "/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> listUsersByName(@RequestParam(name = "name") String name) {
+        return userService.listUsersByName(name);
+    }
+    
+    @ApiOperation(value = "List users by gender")
+    @GetMapping(path = "/{gender}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> listUsersByGender(@RequestParam(name = "gender") Gender gender) {
+        return userService.listUsersByGender(gender);
+    }
+    
+    @ApiOperation(value = "List users by race")
+    @GetMapping(path = "/{race}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> listUsersByRace(@RequestParam(name = "race") Race race) {
+        return userService.listUsersByRace(race);
+    }
+    
+    @ApiOperation(value = "List users by role")
+    @GetMapping(path = "/{role}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> listUsersByRole(@RequestParam(name = "role") Role role) {
+        return userService.listUsersByRole(role);
+    }
+    
+    @ApiOperation(value = "List users by sexual orientation")
+    @GetMapping(path = "/{sexualOrientation}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> listUsersByGender(@RequestParam(name = "sexual_orientation") SexualOrientation sexOrientation) {
+        return userService.listUsersBySexOrientation(sexOrientation);
     }
 
     @ApiOperation(value = "Change attributes of an user")
