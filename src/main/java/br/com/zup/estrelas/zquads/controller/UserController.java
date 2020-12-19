@@ -84,7 +84,7 @@ public class UserController {
     
     @ApiOperation(value = "List users by sexual orientation")
     @GetMapping(path = "/{sexualOrientation}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<User> listUsersByGender(@RequestParam(name = "sexual_orientation") SexualOrientation sexOrientation) {
+    public List<User> listUsersBySexOrientation(@RequestParam(name = "sexual_orientation") SexualOrientation sexOrientation) {
         return userService.listUsersBySexOrientation(sexOrientation);
     }
 

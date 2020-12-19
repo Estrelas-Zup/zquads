@@ -1,5 +1,6 @@
 package br.com.zup.estrelas.zquads.security.service;
 
+import static br.com.zup.estrelas.zquads.constants.ConstantsResponsed.USER_NOT_FOUND;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
 
         return new MyUserDetails(user);
     }
